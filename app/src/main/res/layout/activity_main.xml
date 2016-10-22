@@ -73,6 +73,7 @@
         android:layout_below="@+id/thirdGame"
         android:layout_alignParentStart="true"
         android:background="@color/colorAccent"
-        android:textColor="#FFF"/>
+        android:textColor="#FFF"
+        android:onClick="saveGames"/>
 
 </RelativeLayout>
