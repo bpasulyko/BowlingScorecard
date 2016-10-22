@@ -65,7 +65,7 @@ public class MainDbHandler extends SQLiteOpenHelper {
 
     public List<Game> getAllGames() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_SCORES;
+        String query = "SELECT * FROM " + TABLE_SCORES + " ORDER BY " + COLUMN_GAME_DATE;
         Cursor cursor = db.rawQuery(query, null);
         List<Game> games = new ArrayList<>();
 
@@ -79,15 +79,24 @@ public class MainDbHandler extends SQLiteOpenHelper {
             int totalColumn = cursor.getColumnIndex(COLUMN_GAME_TOTAL);
             int averageColumn = cursor.getColumnIndex(COLUMN_AVERAGE);
             do {
+                Integer id = cursor.getInt(idColumn);
                 Date gameDate = new Date(cursor.getLong(dateColumn));
                 List<Integer> scores = Arrays.asList(cursor.getInt(firstGameColumn), cursor.getInt(secondGameColumn), cursor.getInt(thirdGameColumn));
                 Integer total = cursor.getInt(totalColumn);
                 Integer average = cursor.getInt(averageColumn);
-                games.add(new Game(idColumn, gameDate, scores, total, average));
+                games.add(new Game(id, gameDate, scores, total, average));
             } while(cursor.moveToNext());
             cursor.close();
         }
         db.close();
         return games;
+    }
+
+    public boolean deleteSelectedGame(Game game) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsAffected = db.delete(TABLE_SCORES, COLUMN_SCORES_ID + " = ?",
+                new String[]{String.valueOf(game.getId())});
+        db.close();
+        return rowsAffected > 0;
     }
 }

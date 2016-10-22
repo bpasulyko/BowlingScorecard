@@ -1,5 +1,6 @@
 package bpasulyko.bowlingscorecard.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,10 @@ public class Game {
         this.scores = scores;
         this.total = total;
         this.average = average;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public Date getGameDate() {
@@ -57,8 +62,9 @@ public class Game {
         this.average = average;
     }
 
-    @Override //FULL TO STRING METHOD
+    @Override
     public String toString() {
-        return gameDate + ":  " + total;
+        final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+        return formatter.format(gameDate) + ":  " + total;
     }
 }

@@ -16,7 +16,7 @@ import bpasulyko.bowlingscorecard.dbHandlers.MainDbHandler;
 
 public class AddScores extends AppCompatActivity {
 
-    public static String EXTRA_MESSAGE = "bpasulyko.bowlingscorecard.MESSAGE";
+    public static String EXTRA_MESSAGE = "bpasulyko.bowlingscorecard.AddScores.MESSAGE";
     private EditText dateView;
     private Calendar calendar = Calendar.getInstance();
     private int year, month, day;
