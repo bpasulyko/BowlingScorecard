@@ -3,18 +3,18 @@ package bpasulyko.bowlingscorecard;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import bpasulyko.bowlingscorecard.dbHandlers.MainDbHandler;
 
-public class MainActivity extends AppCompatActivity {
+public class AddScores extends AppCompatActivity {
 
     private EditText dateView;
     private Calendar calendar = Calendar.getInstance();
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_add_scores);
         dbHandler = new MainDbHandler(this, null, null, 1);
 
         dateView = (EditText) findViewById(R.id.datePicker);
@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
         boolean gameAdded = dbHandler.addGame(gameDate, firstGameScore, secondGameScore, thirdGameScore);
         String message = (gameAdded) ? "Game saved!" : "An error has occurred!";
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
-        toast.show();
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
     }
 }
