@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,14 +58,37 @@ public class MainDbHandler extends SQLiteOpenHelper {
         gameValues.put(COLUMN_SECOND_GAME, secondGameScore);
         gameValues.put(COLUMN_THIRD_GAME, thirdGameScore);
         gameValues.put(COLUMN_GAME_TOTAL, (firstGameScore + secondGameScore + thirdGameScore));
-        gameValues.put(COLUMN_AVERAGE, 0);
+        gameValues.put(COLUMN_AVERAGE, getAverage(db, firstGameScore, secondGameScore, thirdGameScore));
         db.insert(TABLE_SCORES, null, gameValues);
         db.close();
         return true;
     }
 
+    private Integer getAverage(SQLiteDatabase db, Integer firstGameScore, Integer secondGameScore, Integer thirdGameScore) {
+        Integer total = 0;
+        List<Integer> allScores = new ArrayList<>();
+        List<Game> games = getAllGames(db);
+        for (Game game : games) {
+            allScores.addAll(game.getScores());
+        }
+        allScores.add(firstGameScore);
+        allScores.add(secondGameScore);
+        allScores.add(thirdGameScore);
+        for (Integer score : allScores) {
+            total += score;
+        }
+        return total / allScores.size();
+    }
+
     public List<Game> getAllGames() {
         SQLiteDatabase db = this.getWritableDatabase();
+        List<Game> games = getAllGames(db);
+        db.close();
+        return games;
+    }
+
+    @NonNull
+    private List<Game> getAllGames(SQLiteDatabase db) {
         String query = "SELECT * FROM " + TABLE_SCORES + " ORDER BY " + COLUMN_GAME_DATE;
         Cursor cursor = db.rawQuery(query, null);
         List<Game> games = new ArrayList<>();
@@ -88,7 +112,6 @@ public class MainDbHandler extends SQLiteOpenHelper {
             } while(cursor.moveToNext());
             cursor.close();
         }
-        db.close();
         return games;
     }
 

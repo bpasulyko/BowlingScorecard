@@ -65,6 +65,6 @@ public class Game {
     @Override
     public String toString() {
         final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
-        return formatter.format(gameDate) + ":  " + total;
+        return formatter.format(gameDate) + ":  " + average;
     }
 }
