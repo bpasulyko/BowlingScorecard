@@ -7,8 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import bpasulyko.bowlingscorecard.models.Game;
 
 public class MainDbHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "bowlingScorecard.db";
@@ -46,7 +49,7 @@ public class MainDbHandler extends SQLiteOpenHelper {
 
     }
 
-    public boolean addGame(long gameDate, String firstGameScore, String secondGameScore, String thirdGameScore) {
+    public boolean addGame(long gameDate, Integer firstGameScore, Integer secondGameScore, Integer thirdGameScore) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues gameValues = new ContentValues();
         gameValues.put(COLUMN_GAME_DATE, gameDate);
@@ -60,22 +63,31 @@ public class MainDbHandler extends SQLiteOpenHelper {
         return true;
     }
 
-    public List<Date> getAllGames() {
+    public List<Game> getAllGames() {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_SCORES;
         Cursor cursor = db.rawQuery(query, null);
-        List<Date> dates = new ArrayList<>();
+        List<Game> games = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
+            int idColumn = cursor.getColumnIndex(COLUMN_SCORES_ID);
             int dateColumn = cursor.getColumnIndex(COLUMN_GAME_DATE);
+            int firstGameColumn = cursor.getColumnIndex(COLUMN_FIRST_GAME);
+            int secondGameColumn = cursor.getColumnIndex(COLUMN_SECOND_GAME);
+            int thirdGameColumn = cursor.getColumnIndex(COLUMN_SECOND_GAME);
+            int totalColumn = cursor.getColumnIndex(COLUMN_GAME_TOTAL);
+            int averageColumn = cursor.getColumnIndex(COLUMN_AVERAGE);
             do {
-                Date date = new Date(cursor.getLong(dateColumn));
-                dates.add(date);
+                Date gameDate = new Date(cursor.getLong(dateColumn));
+                List<Integer> scores = Arrays.asList(cursor.getInt(firstGameColumn), cursor.getInt(secondGameColumn), cursor.getInt(thirdGameColumn));
+                Integer total = cursor.getInt(totalColumn);
+                Integer average = cursor.getInt(averageColumn);
+                games.add(new Game(idColumn, gameDate, scores, total, average));
             } while(cursor.moveToNext());
             cursor.close();
         }
         db.close();
-        return dates;
+        return games;
     }
 }

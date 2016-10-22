@@ -2,8 +2,8 @@ package bpasulyko.bowlingscorecard;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.DatePicker;
@@ -16,6 +16,7 @@ import bpasulyko.bowlingscorecard.dbHandlers.MainDbHandler;
 
 public class AddScores extends AppCompatActivity {
 
+    public static String EXTRA_MESSAGE = "bpasulyko.bowlingscorecard.MESSAGE";
     private EditText dateView;
     private Calendar calendar = Calendar.getInstance();
     private int year, month, day;
@@ -64,12 +65,15 @@ public class AddScores extends AppCompatActivity {
         EditText firstGame = (EditText) findViewById(R.id.firstGame);
         EditText secondGame = (EditText) findViewById(R.id.secondGame);
         EditText thirdGame = (EditText) findViewById(R.id.thirdGame);
-        String firstGameScore = firstGame.getText().toString();
-        String secondGameScore = secondGame.getText().toString();
-        String thirdGameScore = thirdGame.getText().toString();
+        Integer firstGameScore = Integer.parseInt(firstGame.getText().toString());
+        Integer secondGameScore = Integer.parseInt(secondGame.getText().toString());
+        Integer thirdGameScore = Integer.parseInt(thirdGame.getText().toString());
 
         boolean gameAdded = dbHandler.addGame(gameDate, firstGameScore, secondGameScore, thirdGameScore);
         String message = (gameAdded) ? "Game saved!" : "An error has occurred!";
-        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, GamesList.class);
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
     }
 }
