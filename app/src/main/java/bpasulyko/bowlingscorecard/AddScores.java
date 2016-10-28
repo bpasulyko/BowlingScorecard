@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,7 +18,7 @@ import bpasulyko.bowlingscorecard.dbHandlers.MainDbHandler;
 public class AddScores extends AppCompatActivity {
 
     public static String EXTRA_MESSAGE = "bpasulyko.bowlingscorecard.AddScores.MESSAGE";
-    private EditText dateView;
+    private TextView dateView;
     private Calendar calendar = Calendar.getInstance();
     private int year, month, day;
     private final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
@@ -29,7 +30,7 @@ public class AddScores extends AppCompatActivity {
         setContentView(R.layout.activity_add_scores);
         dbHandler = new MainDbHandler(this, null, null, 1);
 
-        dateView = (EditText) findViewById(R.id.datePicker);
+        dateView = (TextView) findViewById(R.id.datePicker);
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
