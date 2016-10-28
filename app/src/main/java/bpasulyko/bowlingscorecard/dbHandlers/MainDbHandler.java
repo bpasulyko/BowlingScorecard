@@ -99,7 +99,7 @@ public class MainDbHandler extends SQLiteOpenHelper {
             int dateColumn = cursor.getColumnIndex(COLUMN_GAME_DATE);
             int firstGameColumn = cursor.getColumnIndex(COLUMN_FIRST_GAME);
             int secondGameColumn = cursor.getColumnIndex(COLUMN_SECOND_GAME);
-            int thirdGameColumn = cursor.getColumnIndex(COLUMN_SECOND_GAME);
+            int thirdGameColumn = cursor.getColumnIndex(COLUMN_THIRD_GAME);
             int totalColumn = cursor.getColumnIndex(COLUMN_GAME_TOTAL);
             int averageColumn = cursor.getColumnIndex(COLUMN_AVERAGE);
             do {
