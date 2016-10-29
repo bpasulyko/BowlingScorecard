@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.DatePicker;
@@ -66,15 +67,28 @@ public class AddScores extends AppCompatActivity {
         EditText firstGame = (EditText) findViewById(R.id.firstGame);
         EditText secondGame = (EditText) findViewById(R.id.secondGame);
         EditText thirdGame = (EditText) findViewById(R.id.thirdGame);
-        Integer firstGameScore = Integer.parseInt(firstGame.getText().toString());
-        Integer secondGameScore = Integer.parseInt(secondGame.getText().toString());
-        Integer thirdGameScore = Integer.parseInt(thirdGame.getText().toString());
+        String firstGameScore = firstGame.getText().toString();
+        String secondGameScore = secondGame.getText().toString();
+        String thirdGameScore = thirdGame.getText().toString();
 
-        boolean gameAdded = dbHandler.addGame(gameDate, firstGameScore, secondGameScore, thirdGameScore);
-        String message = (gameAdded) ? "Game saved!" : "An error has occurred!";
+        if (invalidScores(firstGameScore, secondGameScore, thirdGameScore)) {
+            Snackbar.make(this.findViewById(R.id.activity_main), "Fill in all scores!", Snackbar.LENGTH_SHORT).show();
+        } else {
+            boolean gameAdded = dbHandler.addGame(
+                    gameDate,
+                    Integer.parseInt(firstGameScore),
+                    Integer.parseInt(secondGameScore),
+                    Integer.parseInt(thirdGameScore));
+            String message = (gameAdded) ? "Game saved!" : "An error has occurred!";
 
-        Intent intent = new Intent(this, GamesList.class);
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+            Intent intent = new Intent(this, GamesList.class);
+            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private boolean invalidScores(String firstGameScore, String secondGameScore, String thirdGameScore) {
+        return firstGameScore.equals("") || secondGameScore.equals("") || thirdGameScore.equals("");
     }
 }
