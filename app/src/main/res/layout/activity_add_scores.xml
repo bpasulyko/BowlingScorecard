@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="bpasulyko.bowlingscorecard.AddScores">
+    tools:context="bpasulyko.bowlingscorecard.AddScores"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
@@ -16,20 +17,16 @@
         android:ems="10"
         android:id="@+id/datePicker"
         android:onClick="setDate"
-        android:hint="Select Date"
+        android:hint="@string/select_date"
         android:textSize="18sp"
         android:drawableStart="@drawable/ic_date_range"
         android:drawablePadding="10dp"
-        android:textColor="#212121"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:textColor="#212121" />
 
     <TextView
-        android:text="Games"
+        android:text="@string/games"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/datePicker"
-        android:layout_alignParentStart="true"
         android:layout_marginTop="54dp"
         android:id="@+id/gamesLabel"
         android:textSize="18sp" />
@@ -41,8 +38,6 @@
         android:ems="10"
         android:layout_marginTop="16dp"
         android:id="@+id/firstGame"
-        android:layout_below="@+id/gamesLabel"
-        android:layout_alignParentStart="true"
         android:hint="1." />
 
     <EditText
@@ -52,9 +47,7 @@
         android:ems="10"
         android:id="@+id/secondGame"
         android:hint="2."
-        android:layout_marginTop="12dp"
-        android:layout_below="@+id/firstGame"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="12dp" />
 
     <EditText
         android:layout_width="match_parent"
@@ -63,20 +56,16 @@
         android:ems="10"
         android:id="@+id/thirdGame"
         android:hint="3."
-        android:layout_below="@+id/secondGame"
-        android:layout_alignParentStart="true"
         android:layout_marginTop="10dp" />
 
     <Button
-        android:text="Save"
+        android:text="@string/save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="73dp"
         android:id="@+id/saveButton"
-        android:layout_below="@+id/thirdGame"
-        android:layout_alignParentStart="true"
         android:background="@color/colorAccent"
-        android:textColor="#FFF"
+        android:textColor="@color/colorText"
         android:onClick="saveGames"/>
 
-</RelativeLayout>
+</LinearLayout>

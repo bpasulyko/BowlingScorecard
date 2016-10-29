@@ -17,7 +17,7 @@
         android:layout_height="375dp" />
 
     <Button
-        android:text="Add Scores"
+        android:text="@string/add_scores"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button"
