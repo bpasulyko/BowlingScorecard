@@ -1,5 +1,6 @@
 package bpasulyko.bowlingscorecard.models;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -7,18 +8,18 @@ import java.util.List;
 public class Game {
     private Integer id;
     private Date gameDate;
-    private List<Integer> scores;
-    private Integer total;
-    private Integer average;
+    private List<Double> scores;
+    private Double total;
+    private Double average;
 
-    public Game(Date gameDate, List<Integer> scores, Integer total, Integer average) {
+    public Game(Date gameDate, List<Double> scores, Double total, Double average) {
         this.gameDate = gameDate;
         this.scores = scores;
         this.total = total;
         this.average = average;
     }
 
-    public Game(Integer id, Date gameDate, List<Integer> scores, Integer total, Integer average) {
+    public Game(Integer id, Date gameDate, List<Double> scores, Double total, Double average) {
         this.id = id;
         this.gameDate = gameDate;
         this.scores = scores;
@@ -38,33 +39,34 @@ public class Game {
         this.gameDate = gameDate;
     }
 
-    public List<Integer> getScores() {
+    public List<Double> getScores() {
         return scores;
     }
 
-    public void setScores(List<Integer> scores) {
+    public void setScores(List<Double> scores) {
         this.scores = scores;
     }
 
-    public Integer getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(Integer total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
 
-    public Integer getAverage() {
+    public Double getAverage() {
         return average;
     }
 
-    public void setAverage(Integer average) {
+    public void setAverage(Double average) {
         this.average = average;
     }
 
     @Override
     public String toString() {
         final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
-        return formatter.format(gameDate) + ":  " + scores.toString() + " -- " + average;
+        DecimalFormat decimalFormat = new DecimalFormat("#");
+        return formatter.format(gameDate) + ":  " + scores.toString() + " -- " + decimalFormat.format(average);
     }
 }

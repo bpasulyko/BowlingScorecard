@@ -76,9 +76,9 @@ public class AddScores extends AppCompatActivity {
         } else {
             boolean gameAdded = dbHandler.addGame(
                     gameDate,
-                    Integer.parseInt(firstGameScore),
-                    Integer.parseInt(secondGameScore),
-                    Integer.parseInt(thirdGameScore));
+                    Double.parseDouble(firstGameScore),
+                    Double.parseDouble(secondGameScore),
+                    Double.parseDouble(thirdGameScore));
             String message = (gameAdded) ? "Game saved!" : "An error has occurred!";
 
             Intent intent = new Intent(this, GamesList.class);

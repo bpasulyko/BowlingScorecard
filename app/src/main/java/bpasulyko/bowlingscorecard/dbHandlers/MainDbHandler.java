@@ -30,11 +30,11 @@ public class MainDbHandler extends SQLiteOpenHelper {
             "CREATE TABLE " + TABLE_SCORES + "("
             + COLUMN_SCORES_ID + " INTEGER PRIMARY KEY,"
             + COLUMN_GAME_DATE + " INTEGER,"
-            + COLUMN_FIRST_GAME + " INTEGER,"
-            + COLUMN_SECOND_GAME + " INTEGER,"
-            + COLUMN_THIRD_GAME + " INTEGER,"
-            + COLUMN_GAME_TOTAL + " INTEGER,"
-            + COLUMN_AVERAGE + " INTEGER)";
+            + COLUMN_FIRST_GAME + " REAL,"
+            + COLUMN_SECOND_GAME + " REAL,"
+            + COLUMN_THIRD_GAME + " REAL,"
+            + COLUMN_GAME_TOTAL + " REAL,"
+            + COLUMN_AVERAGE + " REAL)";
 
     public MainDbHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DB_NAME, factory, DB_VERSION);
@@ -50,7 +50,7 @@ public class MainDbHandler extends SQLiteOpenHelper {
 
     }
 
-    public boolean addGame(long gameDate, Integer firstGameScore, Integer secondGameScore, Integer thirdGameScore) {
+    public boolean addGame(long gameDate, Double firstGameScore, Double secondGameScore, Double thirdGameScore) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues gameValues = new ContentValues();
         gameValues.put(COLUMN_GAME_DATE, gameDate);
@@ -64,9 +64,9 @@ public class MainDbHandler extends SQLiteOpenHelper {
         return true;
     }
 
-    private Integer getAverage(SQLiteDatabase db, Integer firstGameScore, Integer secondGameScore, Integer thirdGameScore) {
-        Integer total = 0;
-        List<Integer> allScores = new ArrayList<>();
+    private Double getAverage(SQLiteDatabase db, Double firstGameScore, Double secondGameScore, Double thirdGameScore) {
+        Double total = 0d;
+        List<Double> allScores = new ArrayList<>();
         List<Game> games = getAllGames(db);
         for (Game game : games) {
             allScores.addAll(game.getScores());
@@ -74,10 +74,10 @@ public class MainDbHandler extends SQLiteOpenHelper {
         allScores.add(firstGameScore);
         allScores.add(secondGameScore);
         allScores.add(thirdGameScore);
-        for (Integer score : allScores) {
+        for (Double score : allScores) {
             total += score;
         }
-        return total / allScores.size();
+        return Math.floor(total / allScores.size());
     }
 
     public List<Game> getAllGames() {
@@ -105,9 +105,9 @@ public class MainDbHandler extends SQLiteOpenHelper {
             do {
                 Integer id = cursor.getInt(idColumn);
                 Date gameDate = new Date(cursor.getLong(dateColumn));
-                List<Integer> scores = Arrays.asList(cursor.getInt(firstGameColumn), cursor.getInt(secondGameColumn), cursor.getInt(thirdGameColumn));
-                Integer total = cursor.getInt(totalColumn);
-                Integer average = cursor.getInt(averageColumn);
+                List<Double> scores = Arrays.asList(cursor.getDouble(firstGameColumn), cursor.getDouble(secondGameColumn), cursor.getDouble(thirdGameColumn));
+                Double total = cursor.getDouble(totalColumn);
+                Double average = cursor.getDouble(averageColumn);
                 games.add(new Game(id, gameDate, scores, total, average));
             } while(cursor.moveToNext());
             cursor.close();
