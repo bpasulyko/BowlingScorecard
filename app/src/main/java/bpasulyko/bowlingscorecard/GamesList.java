@@ -94,6 +94,9 @@ public class GamesList extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_bar_games, menu);
+        int deleteIcon = (deleteMode) ? R.drawable.ic_clear : R.drawable.ic_delete;
+        menu.findItem(R.id.action_delete).setIcon(deleteIcon);
+        menu.findItem(R.id.action_add).setVisible(!deleteMode);
         return true;
     }
 
@@ -106,15 +109,9 @@ public class GamesList extends AppCompatActivity {
                 return true;
 
             case R.id.action_delete:
-                if (deleteMode) {
-                    deleteMode = false;
-                    item.setIcon(R.drawable.ic_delete);
-                    gamesListView.setAdapter(new GameListAdapter(this, games, deleteMode));
-                } else {
-                    deleteMode = true;
-                    item.setIcon(R.drawable.ic_clear);
-                    gamesListView.setAdapter(new GameListAdapter(this, games, deleteMode));
-                }
+                deleteMode = !deleteMode;
+                gamesListView.setAdapter(new GameListAdapter(this, games, deleteMode));
+                invalidateOptionsMenu();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
