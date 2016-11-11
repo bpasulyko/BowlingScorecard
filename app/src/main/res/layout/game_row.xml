@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/game_row"
+    android:layout_width="fill_parent"
+    android:animateLayoutChanges="true"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingLeft="10dp"
+    android:paddingTop="7dp"
+    android:paddingBottom="7dp"
+    android:paddingRight="0dp">
+
+    <TextView
+        android:id="@+id/game_date_list_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#212121"/>
+
+    <TextView
+        android:id="@+id/scores_sub_item"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textSize="14sp"
+        android:textColor="#212121" />
+
+    <ImageView
+        android:id="@+id/remove_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_remove"
+        android:visibility="invisible"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingRight="20dp" />
+
+</RelativeLayout>
