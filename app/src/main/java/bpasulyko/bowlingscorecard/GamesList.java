@@ -3,9 +3,13 @@ package bpasulyko.bowlingscorecard;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,6 +29,8 @@ public class GamesList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_games_list);
+        createToolbar();
+
         dbHandler = new MainDbHandler(this, null, null, 1);
         List<Game> games = dbHandler.getAllGames();
 
@@ -40,9 +46,10 @@ public class GamesList extends AppCompatActivity {
         }
     }
 
-    public void addScores(View view) {
-        Intent intent = new Intent(this, AddScores.class);
-        startActivity(intent);
+    private void createToolbar() {
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setTitle(R.string.games);
+        setSupportActionBar(myToolbar);
     }
 
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
@@ -80,5 +87,20 @@ public class GamesList extends AppCompatActivity {
         confirmationDialog.setNegativeButton("No", cancel);
         AlertDialog confirmationAlert = confirmationDialog.create();
         confirmationAlert.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_bar_games, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = new Intent(this, AddScores.class);
+        startActivity(intent);
+        finish();
+        return true;
     }
 }

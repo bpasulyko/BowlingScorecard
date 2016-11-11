@@ -67,6 +67,10 @@ public class Game {
     public String toString() {
         final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
         DecimalFormat decimalFormat = new DecimalFormat("#");
-        return formatter.format(gameDate) + ":  " + scores.toString() + " -- " + decimalFormat.format(average);
+        String scoreString = "";
+        for (Double score : scores) {
+            scoreString += String.format(" %s ", decimalFormat.format(score));
+        }
+        return formatter.format(gameDate) + ":  " + scoreString + " -- " + decimalFormat.format(average);
     }
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ public class AddScores extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_scores);
+        createToolbar();
         dbHandler = new MainDbHandler(this, null, null, 1);
 
         dateView = (TextView) findViewById(R.id.datePicker);
@@ -36,6 +38,12 @@ public class AddScores extends AppCompatActivity {
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
         showDate();
+    }
+
+    private void createToolbar() {
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setTitle(R.string.add_scores);
+        setSupportActionBar(myToolbar);
     }
 
     public void setDate(View view) {

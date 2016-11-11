@@ -1,71 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="bpasulyko.bowlingscorecard.AddScores"
     android:orientation="vertical">
+    <include android:id="@+id/my_toolbar" layout="@layout/toolbar" />
 
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:id="@+id/datePicker"
-        android:onClick="setDate"
-        android:hint="@string/select_date"
-        android:textSize="18sp"
-        android:drawableStart="@drawable/ic_date_range"
-        android:drawablePadding="10dp"
-        android:textColor="#212121" />
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="bpasulyko.bowlingscorecard.AddScores"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:id="@+id/datePicker"
+            android:onClick="setDate"
+            android:hint="@string/select_date"
+            android:textSize="18sp"
+            android:drawableStart="@drawable/ic_date_range"
+            android:drawablePadding="10dp"
+            android:textColor="#212121" />
 
-    <TextView
-        android:text="@string/games"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="54dp"
-        android:id="@+id/gamesLabel"
-        android:textSize="18sp" />
+        <TextView
+            android:text="@string/games"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="54dp"
+            android:id="@+id/gamesLabel"
+            android:textSize="18sp" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:layout_marginTop="16dp"
-        android:id="@+id/firstGame"
-        android:hint="1." />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:layout_marginTop="16dp"
+            android:id="@+id/firstGame"
+            android:hint="1." />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/secondGame"
-        android:hint="2."
-        android:layout_marginTop="12dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/secondGame"
+            android:hint="2."
+            android:layout_marginTop="12dp" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/thirdGame"
-        android:hint="3."
-        android:layout_marginTop="10dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/thirdGame"
+            android:hint="3."
+            android:layout_marginTop="10dp" />
 
-    <Button
-        android:text="@string/save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="73dp"
-        android:id="@+id/saveButton"
-        android:background="@color/colorAccent"
-        android:textColor="@color/colorText"
-        android:onClick="saveGames"/>
+        <Button
+            android:text="@string/save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="73dp"
+            android:id="@+id/saveButton"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorText"
+            android:onClick="saveGames"/>
 
+    </LinearLayout>
 </LinearLayout>
