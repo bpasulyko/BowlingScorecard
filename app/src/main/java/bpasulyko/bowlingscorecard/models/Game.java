@@ -1,5 +1,7 @@
 package bpasulyko.bowlingscorecard.models;
 
+import android.support.annotation.NonNull;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -70,11 +72,25 @@ public class Game {
 
     @Override
     public String toString() {
-        DecimalFormat decimalFormat = new DecimalFormat("#");
+        DecimalFormat decimalFormat = getDecimalFormat();
         String scoreString = "";
         for (Double score : scores) {
             scoreString += String.format(" %s ", decimalFormat.format(score));
         }
         return getFormattedDateString() + ":  " + scoreString + " -- " + decimalFormat.format(average);
+    }
+
+    public String getScoresString() {
+        DecimalFormat decimalFormat = getDecimalFormat();
+        List<Double> scores = getScores();
+        String firstGame = decimalFormat.format(scores.get(0));
+        String secondGame = decimalFormat.format(scores.get(1));
+        String thirdGame = decimalFormat.format(scores.get(2));
+        return String.format("%s | %s | %s", firstGame, secondGame, thirdGame);
+    }
+
+    @NonNull
+    public DecimalFormat getDecimalFormat() {
+        return new DecimalFormat("#");
     }
 }

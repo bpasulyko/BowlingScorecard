@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import bpasulyko.bowlingscorecard.models.Game;
@@ -42,14 +43,22 @@ public class GameListAdapter extends BaseAdapter {
         if(convertView==null)
             vi = inflater.inflate(R.layout.game_row, null);
 
-        TextView date = (TextView)vi.findViewById(R.id.game_date_list_item);
-        TextView scores = (TextView)vi.findViewById(R.id.scores_sub_item);
+        TextView heading = (TextView)vi.findViewById(R.id.game_date_list_item);
+        TextView subHeading = (TextView)vi.findViewById(R.id.scores_sub_item);
         ImageView removeIcon = (ImageView) vi.findViewById(R.id.remove_icon);
 
         Game game = games.get(position);
 
-        date.setText(game.getFormattedDateString());
-        scores.setText(game.getScores().toString());
+        heading.setText(game.getFormattedDateString() + ":  " + game.getScoresString());
+        DecimalFormat df = game.getDecimalFormat();
+        String total = df.format(game.getTotal());
+        Double threeGameTotal = 0d;
+        for (Double score : game.getScores()) {
+            threeGameTotal += score;
+        }
+        String average = df.format(Math.floor(threeGameTotal / 3));
+        String runningAvg = df.format(game.getAverage());
+        subHeading.setText(String.format("Total: %s  Average: %s  Running Avg: %s", total, average, runningAvg));
         if (visible) {
             removeIcon.setVisibility(View.VISIBLE);
         }
