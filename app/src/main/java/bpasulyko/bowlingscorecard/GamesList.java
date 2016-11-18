@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -90,24 +91,26 @@ public class GamesList extends AppCompatActivity {
         confirmationAlert.show();
     }
 
+    public void addScores(View view) {
+        Intent intent = new Intent(this, AddScores.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_bar_games, menu);
         int deleteIcon = (deleteMode) ? R.drawable.ic_clear : R.drawable.ic_delete;
         menu.findItem(R.id.action_delete).setIcon(deleteIcon);
-        menu.findItem(R.id.action_add).setVisible(!deleteMode);
+        FloatingActionButton addButton = (FloatingActionButton) findViewById(R.id.add_scores_button);
+        int visibility = (deleteMode) ? View.INVISIBLE : View.VISIBLE;
+        addButton.setVisibility(visibility);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.action_add:
-                Intent intent = new Intent(this, AddScores.class);
-                startActivity(intent);
-                return true;
-
             case R.id.action_delete:
                 deleteMode = !deleteMode;
                 gamesListView.setAdapter(new GameListAdapter(this, games, deleteMode));

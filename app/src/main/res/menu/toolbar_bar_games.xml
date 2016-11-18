@@ -6,10 +6,4 @@
         android:icon="@drawable/ic_delete"
         app:showAsAction="ifRoom"
         android:title="Delete" />
-
-    <item
-        android:id="@+id/action_add"
-        android:icon="@drawable/ic_library_add"
-        app:showAsAction="ifRoom"
-        android:title="Add" />
 </menu>

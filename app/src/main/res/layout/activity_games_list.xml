@@ -2,11 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="bpasulyko.bowlingscorecard.GamesList"
     android:orientation="vertical">
     <include android:id="@+id/my_toolbar" layout="@layout/toolbar" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/activity_games_list"
         android:layout_width="match_parent"
@@ -19,5 +20,16 @@
             android:id="@+id/gamesList"
             android:layout_height="match_parent" />
 
-    </LinearLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_scores_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_add"
+            app:layout_anchor="@id/gamesList"
+            app:layout_anchorGravity="bottom|right|end"
+            android:onClick="addScores"/>
+
+    </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>
