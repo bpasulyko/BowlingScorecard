@@ -15,37 +15,28 @@ import bpasulyko.bowlingscorecard.models.Game;
 
 public class Stats extends AppCompatActivity {
 
-    private MainDbHandler dbHandler;
     private List<Game> allGames;
     List<Double> allScores = new ArrayList<>();
-    private TextView runningAvg;
-    private TextView bestAvg;
-    private TextView bestGame;
-    private TextView worstGame;
-    private TextView best3GameTotal;
-    private TextView threeGameAverage;
-    private TextView totalGames;
-    private TextView gamesOverAverage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
         createToolbar();
-        dbHandler = new MainDbHandler(this, null, null, 1);
+        MainDbHandler dbHandler = new MainDbHandler(this, null, null, 1);
         allGames = dbHandler.getAllGames();
         for (Game game : allGames) {
             allScores.addAll(game.getScores());
         }
 
-        runningAvg = (TextView) findViewById(R.id.runningAvg);
-        bestAvg = (TextView) findViewById(R.id.bestAvg);
-        bestGame = (TextView) findViewById(R.id.bestGame);
-        worstGame = (TextView) findViewById(R.id.worstGame);
-        best3GameTotal = (TextView) findViewById(R.id.best3GameTotal);
-        threeGameAverage = (TextView) findViewById(R.id.threeGameAverage);
-        totalGames = (TextView) findViewById(R.id.numberOfGames);
-        gamesOverAverage = (TextView) findViewById(R.id.gamesOverAvgerage);
+        TextView runningAvg = (TextView) findViewById(R.id.runningAvg);
+        TextView bestAvg = (TextView) findViewById(R.id.bestAvg);
+        TextView bestGame = (TextView) findViewById(R.id.bestGame);
+        TextView worstGame = (TextView) findViewById(R.id.worstGame);
+        TextView best3GameTotal = (TextView) findViewById(R.id.best3GameTotal);
+        TextView threeGameAverage = (TextView) findViewById(R.id.threeGameAverage);
+        TextView totalGames = (TextView) findViewById(R.id.numberOfGames);
+        TextView gamesOverAverage = (TextView) findViewById(R.id.gamesOverAvgerage);
 
         runningAvg.setText(formatNumber(getRunningAverage()));
         bestAvg.setText(formatNumber(getBestAverage()));
