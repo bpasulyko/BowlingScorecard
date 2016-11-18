@@ -90,7 +90,7 @@ public class Game {
     }
 
     @NonNull
-    public DecimalFormat getDecimalFormat() {
+    public static DecimalFormat getDecimalFormat() {
         return new DecimalFormat("#");
     }
 }
