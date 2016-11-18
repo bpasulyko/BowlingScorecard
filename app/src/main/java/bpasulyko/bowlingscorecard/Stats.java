@@ -24,6 +24,8 @@ public class Stats extends AppCompatActivity {
     private TextView worstGame;
     private TextView best3GameTotal;
     private TextView threeGameAverage;
+    private TextView totalGames;
+    private TextView gamesOverAverage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,60 +44,64 @@ public class Stats extends AppCompatActivity {
         worstGame = (TextView) findViewById(R.id.worstGame);
         best3GameTotal = (TextView) findViewById(R.id.best3GameTotal);
         threeGameAverage = (TextView) findViewById(R.id.threeGameAverage);
+        totalGames = (TextView) findViewById(R.id.numberOfGames);
+        gamesOverAverage = (TextView) findViewById(R.id.gamesOverAvgerage);
 
-        runningAvg.setText(getRunningAverage());
-        bestAvg.setText(getBestAverage());
-        bestGame.setText(getBestGame());
-        worstGame.setText(getWorstGame());
-        best3GameTotal.setText(getBest3GameTotal());
-        threeGameAverage.setText(get3GameAverage());
+        runningAvg.setText(formatNumber(getRunningAverage()));
+        bestAvg.setText(formatNumber(getBestAverage()));
+        bestGame.setText(formatNumber(getBestGame()));
+        worstGame.setText(formatNumber(getWorstGame()));
+        best3GameTotal.setText(formatNumber(getBest3GameTotal()));
+        threeGameAverage.setText(formatNumber(get3GameAverage()));
+        totalGames.setText(formatNumber((double) allScores.size()));
+        gamesOverAverage.setText(String.format("%s%%", formatNumber(getPercentageOfGamesAboveAverage())));
     }
 
-    private String getRunningAverage() {
-        return Game.getDecimalFormat().format(allGames.get(allGames.size() - 1).getAverage());
+    private Double getRunningAverage() {
+        return allGames.get(allGames.size() - 1).getAverage();
     }
 
-    private String getBestAverage() {
+    private Double getBestAverage() {
         Double bestAvg = Double.MIN_VALUE;
         for (Game game : allGames) {
             if (game.getAverage() > bestAvg) {
                 bestAvg = game.getAverage();
             }
         }
-        return Game.getDecimalFormat().format(bestAvg);
+        return bestAvg;
     }
 
-    private String getBestGame() {
+    private Double getBestGame() {
         Double bestGame = Double.MIN_VALUE;
         for (Double score : allScores) {
             if (score > bestGame) {
                 bestGame = score;
             }
         }
-        return Game.getDecimalFormat().format(bestGame);
+        return bestGame;
     }
 
-    private String getWorstGame() {
+    private Double getWorstGame() {
         Double worstGame = Double.MAX_VALUE;
         for (Double score : allScores) {
             if (score < worstGame) {
                 worstGame = score;
             }
         }
-        return Game.getDecimalFormat().format(worstGame);
+        return worstGame;
     }
 
-    private String getBest3GameTotal() {
+    private Double getBest3GameTotal() {
         Double total = Double.MIN_VALUE;
         for (Game game : allGames) {
             if (game.getTotal() > total) {
                 total = game.getTotal();
             }
         }
-        return Game.getDecimalFormat().format(total);
+        return total;
     }
 
-    private String get3GameAverage() {
+    private Double get3GameAverage() {
         List<Double> totals = new ArrayList<>();;
         for (Game game : allGames) {
             totals.add(game.getTotal());
@@ -105,7 +111,22 @@ public class Stats extends AppCompatActivity {
         for (Double score : totals) {
             total += score;
         }
-        return Game.getDecimalFormat().format(total / allGames.size());
+        return total / allGames.size();
+    }
+
+    private Double getPercentageOfGamesAboveAverage() {
+        Double gamesOverAvg = 0d;
+        Double runningAvg = getRunningAverage();
+        for (Double score : allScores) {
+            if (score > runningAvg) {
+                gamesOverAvg++;
+            }
+        }
+        return (gamesOverAvg / allScores.size())* 100d;
+    }
+
+    private String formatNumber(Double number) {
+        return Game.getDecimalFormat().format(number);
     }
 
     private void createToolbar() {

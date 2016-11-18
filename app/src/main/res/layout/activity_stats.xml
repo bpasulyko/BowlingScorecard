@@ -18,56 +18,52 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <TableRow android:layout_height="wrap_content"
-            android:layout_width="match_parent">
+            android:layout_width="match_parent"
+            android:paddingBottom="15dp">
             <TextView
                 android:text="RUNNING AVERAGE"
                 android:layout_weight="1"
                 android:gravity="start"/>
-
-            <TextView
-                android:text="BEST AVERAGE"
-                android:layout_weight="1"
-                android:gravity="start"/>
-        </TableRow>
-        <TableRow
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:paddingBottom="40dp">
             <TextView
                 android:id = "@+id/runningAvg"
                 android:layout_weight="1"
                 android:gravity="start"
-                android:theme="@style/StatValues"
-                 />
-
+                android:theme="@style/StatValues"/>
+        </TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingBottom="15dp">
+            <TextView
+                android:text="BEST AVERAGE"
+                android:layout_weight="1"
+                android:gravity="start"/>
             <TextView
                 android:id = "@+id/bestAvg"
                 android:layout_weight="1"
                 android:gravity="start"
-                android:theme="@style/StatValues"
-                />
+                android:theme="@style/StatValues"/>
         </TableRow>
         <TableRow android:layout_height="wrap_content"
-            android:layout_width="match_parent">
+            android:layout_width="match_parent"
+            android:paddingBottom="15dp">
             <TextView
                 android:text="BEST GAME"
                 android:layout_weight="1"
                 android:gravity="start"/>
-
-            <TextView
-                android:text="WORST GAME"
-                android:layout_weight="1"
-                android:gravity="start"/>
-        </TableRow>
-        <TableRow android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:paddingBottom="40dp">
             <TextView
                 android:id = "@+id/bestGame"
                 android:layout_weight="1"
                 android:gravity="start"
                 android:theme="@style/StatValues"/>
-
+        </TableRow>
+        <TableRow android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingBottom="15dp">
+            <TextView
+                android:text="WORST GAME"
+                android:layout_weight="1"
+                android:gravity="start"/>
             <TextView
                 android:id = "@+id/worstGame"
                 android:layout_weight="1"
@@ -76,29 +72,53 @@
                 />
         </TableRow>
         <TableRow android:layout_height="wrap_content"
-            android:layout_width="match_parent">
-            <TextView
-                android:text="BEST 3-GAME TOTAL"
-                android:layout_weight="1"
-                android:gravity="start"/>
-
-            <TextView
-                android:text="3-GAME AVERAGE"
-                android:layout_weight="1"
-                android:gravity="start"/>
-        </TableRow>
-        <TableRow android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:paddingBottom="20dp">
+            android:paddingBottom="15dp">
+            <TextView
+                android:text="BEST 3-GAME SERIES"
+                android:layout_weight="1"
+                android:gravity="start"/>
             <TextView
                 android:id = "@+id/best3GameTotal"
                 android:layout_weight="1"
                 android:gravity="start"
-                android:theme="@style/StatValues"
-                />
-
+                android:theme="@style/StatValues" />
+        </TableRow>
+        <TableRow android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingBottom="15dp">
+            <TextView
+                android:text="3-GAME AVERAGE"
+                android:layout_weight="1"
+                android:gravity="start"/>
             <TextView
                 android:id = "@+id/threeGameAverage"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:theme="@style/StatValues"/>
+        </TableRow>
+        <TableRow android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingBottom="15dp">
+            <TextView
+                android:text="TOTAL GAMES"
+                android:layout_weight="1"
+                android:gravity="start"/>
+            <TextView
+                android:id = "@+id/numberOfGames"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:theme="@style/StatValues"/>
+        </TableRow>
+        <TableRow android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingBottom="15dp">
+            <TextView
+                android:text="GAMES OVER AVERAGE"
+                android:layout_weight="1"
+                android:gravity="start"/>
+            <TextView
+                android:id = "@+id/gamesOverAvgerage"
                 android:layout_weight="1"
                 android:gravity="start"
                 android:theme="@style/StatValues"/>
