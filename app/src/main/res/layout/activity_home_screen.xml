@@ -24,7 +24,8 @@
             android:layout_width="250dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/button_section"/>
+            android:layout_below="@+id/button_section"
+            android:contentDescription="@string/app_name" />
 
         <LinearLayout
             android:id="@+id/button_section"
@@ -33,7 +34,7 @@
             android:layout_marginTop="285dp"
             android:orientation="vertical">
                 <Button
-                    android:text="View Statistics"
+                    android:text="@string/view_statistics"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"
@@ -42,7 +43,7 @@
                     android:onClick="viewStats"
                     android:layout_marginBottom="16dp"/>
                 <Button
-                    android:text="View Scorecard"
+                    android:text="@string/view_scorecard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"
@@ -51,7 +52,7 @@
                     android:onClick="viewAllGames"
                     android:layout_marginBottom="16dp"/>
                 <Button
-                    android:text="New Game"
+                    android:text="@string/new_game"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimary"

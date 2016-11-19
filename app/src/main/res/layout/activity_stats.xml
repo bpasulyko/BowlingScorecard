@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:paddingBottom="15dp">
             <TextView
-                android:text="RUNNING AVERAGE"
+                android:text="@string/running_average"
                 android:layout_weight="1"
                 android:gravity="start"/>
             <TextView
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:paddingBottom="15dp">
             <TextView
-                android:text="BEST AVERAGE"
+                android:text="@string/best_average"
                 android:layout_weight="1"
                 android:gravity="start"/>
             <TextView
@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:paddingBottom="15dp">
             <TextView
-                android:text="BEST GAME"
+                android:text="@string/best_game"
                 android:layout_weight="1"
                 android:gravity="start"/>
             <TextView
@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:paddingBottom="15dp">
             <TextView
-                android:text="WORST GAME"
+                android:text="@string/worst_game"
                 android:layout_weight="1"
                 android:gravity="start"/>
             <TextView
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:paddingBottom="15dp">
             <TextView
-                android:text="BEST 3-GAME SERIES"
+                android:text="@string/best_3_game_series"
                 android:layout_weight="1"
                 android:gravity="start"/>
             <TextView
@@ -88,7 +88,7 @@
             android:layout_width="match_parent"
             android:paddingBottom="15dp">
             <TextView
-                android:text="3-GAME AVERAGE"
+                android:text="@string/_3_game_average"
                 android:layout_weight="1"
                 android:gravity="start"/>
             <TextView
@@ -101,7 +101,7 @@
             android:layout_width="match_parent"
             android:paddingBottom="15dp">
             <TextView
-                android:text="TOTAL GAMES"
+                android:text="@string/total_games"
                 android:layout_weight="1"
                 android:gravity="start"/>
             <TextView
@@ -114,7 +114,7 @@
             android:layout_width="match_parent"
             android:paddingBottom="15dp">
             <TextView
-                android:text="GAMES OVER AVERAGE"
+                android:text="@string/games_over_average"
                 android:layout_weight="1"
                 android:gravity="start"/>
             <TextView

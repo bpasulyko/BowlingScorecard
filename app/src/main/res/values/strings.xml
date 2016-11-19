@@ -6,4 +6,17 @@
     <string name="save">Save</string>
     <string name="statistics">Statistics</string>
     <string name="scorecard">Scorecard</string>
+    <string name="remove_game">Remove Game</string>
+    <string name="running_average">RUNNING AVERAGE</string>
+    <string name="best_average">BEST AVERAGE</string>
+    <string name="best_game">BEST GAME</string>
+    <string name="worst_game">WORST GAME</string>
+    <string name="best_3_game_series">BEST 3-GAME SERIES</string>
+    <string name="_3_game_average">3-GAME AVERAGE</string>
+    <string name="total_games">TOTAL GAMES</string>
+    <string name="games_over_average">GAMES OVER AVERAGE</string>
+    <string name="view_statistics">View Statistics</string>
+    <string name="view_scorecard">View Scorecard</string>
+    <string name="new_game">New Game</string>
+    <string name="delete">Delete</string>
 </resources>
