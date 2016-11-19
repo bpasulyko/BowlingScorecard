@@ -49,7 +49,7 @@ public class GamesList extends AppCompatActivity {
 
     private void createToolbar() {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setTitle(R.string.games);
+        myToolbar.setTitle(R.string.scorecard);
         setSupportActionBar(myToolbar);
     }
 

@@ -1,10 +1,8 @@
 package bpasulyko.bowlingscorecard;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -124,10 +122,5 @@ public class Stats extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle(R.string.statistics);
         setSupportActionBar(myToolbar);
-    }
-
-    public void viewAllGames(View view) {
-        Intent intent = new Intent(this, GamesList.class);
-        startActivity(intent);
     }
 }
