@@ -26,8 +26,7 @@
             android:hint="@string/select_date"
             android:textSize="18sp"
             android:drawableStart="@drawable/ic_date_range"
-            android:drawablePadding="10dp"
-            android:textColor="#212121" />
+            android:drawablePadding="10dp" />
 
         <TextView
             android:text="@string/games"
@@ -70,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="73dp"
             android:id="@+id/saveButton"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimary"
             android:textColor="@color/colorText"
             android:onClick="saveGames"/>
 
