@@ -13,9 +13,17 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".AddScores" android:screenOrientation="portrait" />
-        <activity android:name=".GamesList" />
-        <activity android:name=".Stats" android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddScores"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".HomeScreen"/>
+        <activity
+            android:name=".GamesList"
+            android:parentActivityName=".HomeScreen"/>
+        <activity
+            android:name=".Stats"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".HomeScreen"/>
         <activity android:name=".HomeScreen" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
