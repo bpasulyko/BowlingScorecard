@@ -9,21 +9,21 @@ import java.util.List;
 
 public class Game {
     private Integer id;
-    private Date gameDate;
+    private Long date;
     private List<Double> scores;
     private Double total;
     private Double average;
 
-    public Game(Date gameDate, List<Double> scores, Double total, Double average) {
-        this.gameDate = gameDate;
+    public Game(Long date, List<Double> scores, Double total, Double average) {
+        this.date = date;
         this.scores = scores;
         this.total = total;
         this.average = average;
     }
 
-    public Game(Integer id, Date gameDate, List<Double> scores, Double total, Double average) {
+    public Game(Integer id, Long date, List<Double> scores, Double total, Double average) {
         this.id = id;
-        this.gameDate = gameDate;
+        this.date = date;
         this.scores = scores;
         this.total = total;
         this.average = average;
@@ -33,12 +33,8 @@ public class Game {
         return id;
     }
 
-    public Date getGameDate() {
-        return gameDate;
-    }
-
-    public void setGameDate(Date gameDate) {
-        this.gameDate = gameDate;
+    public Long getGameDate() {
+        return date;
     }
 
     public List<Double> getScores() {
@@ -67,7 +63,7 @@ public class Game {
 
     public String getFormattedDateString() {
         final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
-        return formatter.format(gameDate);
+        return formatter.format(new Date(date));
     }
 
     @Override

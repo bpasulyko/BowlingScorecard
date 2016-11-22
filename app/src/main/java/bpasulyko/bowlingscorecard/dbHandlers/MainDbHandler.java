@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import bpasulyko.bowlingscorecard.models.Game;
@@ -18,23 +17,22 @@ public class MainDbHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "bowlingScorecard.db";
     private static final int DB_VERSION = 1;
 
-    private static final String TABLE_SCORES = "Scores";
-    private static final String COLUMN_SCORES_ID = "id";
-    private static final String COLUMN_GAME_DATE = "gameDate";
-    private static final String COLUMN_FIRST_GAME = "firstGame";
-    private static final String COLUMN_SECOND_GAME = "secondGame";
-    private static final String COLUMN_THIRD_GAME = "thirdGame";
-    private static final String COLUMN_GAME_TOTAL = "gameTotal";
-    private static final String COLUMN_AVERAGE = "average";
-    private static final String CREATE_SCORES_TABLE =
-            "CREATE TABLE " + TABLE_SCORES + "("
-            + COLUMN_SCORES_ID + " INTEGER PRIMARY KEY,"
-            + COLUMN_GAME_DATE + " INTEGER,"
-            + COLUMN_FIRST_GAME + " REAL,"
-            + COLUMN_SECOND_GAME + " REAL,"
-            + COLUMN_THIRD_GAME + " REAL,"
-            + COLUMN_GAME_TOTAL + " REAL,"
-            + COLUMN_AVERAGE + " REAL)";
+    private static final String CREATE_SCORECARD_TABLE =
+            "CREATE TABLE " + BowlingScorecardContract.Scorecard.TABLE_NAME + "("
+                    + BowlingScorecardContract.Scorecard.COLUMN_ID + " INTEGER PRIMARY KEY,"
+                    + BowlingScorecardContract.Scorecard.COLUMN_NAME + " TEXT)";
+
+    private static final String CREATE_GAME_TABLE =
+            "CREATE TABLE " + BowlingScorecardContract.Game.TABLE_NAME + "("
+                    + BowlingScorecardContract.Game.COLUMN_ID + " INTEGER PRIMARY KEY,"
+                    + BowlingScorecardContract.Game.COLUMN_GAME_DATE + " INTEGER,"
+                    + BowlingScorecardContract.Game.COLUMN_FIRST_GAME + " REAL,"
+                    + BowlingScorecardContract.Game.COLUMN_SECOND_GAME + " REAL,"
+                    + BowlingScorecardContract.Game.COLUMN_THIRD_GAME + " REAL,"
+                    + BowlingScorecardContract.Game.COLUMN_GAME_TOTAL + " REAL,"
+                    + BowlingScorecardContract.Game.COLUMN_AVERAGE + " REAL,"
+                    + BowlingScorecardContract.Game.COLUMN_SCORECARD_ID + " INTEGER,"
+                    + "FOREIGN KEY (" + BowlingScorecardContract.Game.COLUMN_SCORECARD_ID + ") REFERENCES " + BowlingScorecardContract.Scorecard.TABLE_NAME + "(" + BowlingScorecardContract.Scorecard.COLUMN_ID + "))";
 
     public MainDbHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DB_NAME, factory, DB_VERSION);
@@ -42,7 +40,8 @@ public class MainDbHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_SCORES_TABLE);
+         db.execSQL(CREATE_SCORECARD_TABLE);
+         db.execSQL(CREATE_GAME_TABLE);
     }
 
     @Override
@@ -52,22 +51,23 @@ public class MainDbHandler extends SQLiteOpenHelper {
 
     public boolean addGame(long gameDate, Double firstGameScore, Double secondGameScore, Double thirdGameScore) {
         SQLiteDatabase db = this.getWritableDatabase();
+        List<Game> games = getAllGames(db, 1);
         ContentValues gameValues = new ContentValues();
-        gameValues.put(COLUMN_GAME_DATE, gameDate);
-        gameValues.put(COLUMN_FIRST_GAME, firstGameScore);
-        gameValues.put(COLUMN_SECOND_GAME, secondGameScore);
-        gameValues.put(COLUMN_THIRD_GAME, thirdGameScore);
-        gameValues.put(COLUMN_GAME_TOTAL, (firstGameScore + secondGameScore + thirdGameScore));
-        gameValues.put(COLUMN_AVERAGE, getAverage(db, firstGameScore, secondGameScore, thirdGameScore));
-        db.insert(TABLE_SCORES, null, gameValues);
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_DATE, gameDate);
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_FIRST_GAME, firstGameScore);
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_SECOND_GAME, secondGameScore);
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_THIRD_GAME, thirdGameScore);
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_TOTAL, (firstGameScore + secondGameScore + thirdGameScore));
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_AVERAGE, getAverage(db, firstGameScore, secondGameScore, thirdGameScore, games));
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_SCORECARD_ID, 1);
+        db.insert(BowlingScorecardContract.Game.TABLE_NAME, null, gameValues);
         db.close();
         return true;
     }
 
-    private Double getAverage(SQLiteDatabase db, Double firstGameScore, Double secondGameScore, Double thirdGameScore) {
+    private Double getAverage(SQLiteDatabase db, Double firstGameScore, Double secondGameScore, Double thirdGameScore, List<Game> games) {
         Double total = 0d;
         List<Double> allScores = new ArrayList<>();
-        List<Game> games = getAllGames(db);
         for (Game game : games) {
             allScores.addAll(game.getScores());
         }
@@ -82,29 +82,38 @@ public class MainDbHandler extends SQLiteOpenHelper {
 
     public List<Game> getAllGames() {
         SQLiteDatabase db = this.getWritableDatabase();
-        List<Game> games = getAllGames(db);
+        List<Game> games = getAllGames(db, 1);
         db.close();
         return games;
     }
 
     @NonNull
-    private List<Game> getAllGames(SQLiteDatabase db) {
-        String query = "SELECT * FROM " + TABLE_SCORES + " ORDER BY " + COLUMN_GAME_DATE;
+    private List<Game> getAllGames(SQLiteDatabase db, Integer scoreCardId) {
+        String query = "SELECT " + BowlingScorecardContract.Game.COLUMN_ID + ", " +
+                BowlingScorecardContract.Game.COLUMN_GAME_DATE + ", " +
+                BowlingScorecardContract.Game.COLUMN_FIRST_GAME + ", " +
+                BowlingScorecardContract.Game.COLUMN_SECOND_GAME + ", " +
+                BowlingScorecardContract.Game.COLUMN_THIRD_GAME + ", " +
+                BowlingScorecardContract.Game.COLUMN_GAME_TOTAL + ", " +
+                BowlingScorecardContract.Game.COLUMN_AVERAGE +
+                " FROM " + BowlingScorecardContract.Game.TABLE_NAME +
+                " WHERE " + BowlingScorecardContract.Game.COLUMN_SCORECARD_ID + " = " + scoreCardId +
+                " ORDER BY " + BowlingScorecardContract.Game.COLUMN_GAME_DATE;
         Cursor cursor = db.rawQuery(query, null);
         List<Game> games = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
-            int idColumn = cursor.getColumnIndex(COLUMN_SCORES_ID);
-            int dateColumn = cursor.getColumnIndex(COLUMN_GAME_DATE);
-            int firstGameColumn = cursor.getColumnIndex(COLUMN_FIRST_GAME);
-            int secondGameColumn = cursor.getColumnIndex(COLUMN_SECOND_GAME);
-            int thirdGameColumn = cursor.getColumnIndex(COLUMN_THIRD_GAME);
-            int totalColumn = cursor.getColumnIndex(COLUMN_GAME_TOTAL);
-            int averageColumn = cursor.getColumnIndex(COLUMN_AVERAGE);
+            int idColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_ID);
+            int dateColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_GAME_DATE);
+            int firstGameColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_FIRST_GAME);
+            int secondGameColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_SECOND_GAME);
+            int thirdGameColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_THIRD_GAME);
+            int totalColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_GAME_TOTAL);
+            int averageColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_AVERAGE);
             do {
                 Integer id = cursor.getInt(idColumn);
-                Date gameDate = new Date(cursor.getLong(dateColumn));
+                long gameDate = cursor.getLong(dateColumn);
                 List<Double> scores = Arrays.asList(cursor.getDouble(firstGameColumn), cursor.getDouble(secondGameColumn), cursor.getDouble(thirdGameColumn));
                 Double total = cursor.getDouble(totalColumn);
                 Double average = cursor.getDouble(averageColumn);
@@ -117,9 +126,36 @@ public class MainDbHandler extends SQLiteOpenHelper {
 
     public boolean deleteSelectedGame(Game game) {
         SQLiteDatabase db = this.getWritableDatabase();
-        int rowsAffected = db.delete(TABLE_SCORES, COLUMN_SCORES_ID + " = ?",
+        int rowsAffected = db.delete(BowlingScorecardContract.Game.TABLE_NAME, BowlingScorecardContract.Game.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(game.getId())});
         db.close();
         return rowsAffected > 0;
     }
+
+//    public void updateDb() {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        db.execSQL("DROP TABLE IF EXISTS " + BowlingScorecardContract.Scorecard.TABLE_NAME);
+//        db.execSQL("DROP TABLE IF EXISTS " + BowlingScorecardContract.Game.TABLE_NAME);
+//        db.execSQL(CREATE_SCORECARD_TABLE);
+//        db.execSQL(CREATE_GAME_TABLE);
+//        ContentValues scorecard = new ContentValues();
+//        scorecard.put(BowlingScorecardContract.Scorecard.COLUMN_NAME, "2016/17");
+//        long id = db.insert(BowlingScorecardContract.Scorecard.TABLE_NAME, null, scorecard);
+//        System.out.println("INSERTED ID = " + id);
+//
+//        List<Game> games = getAllGamesOLD(db);
+//        for (Game game : games) {
+//            ContentValues gameValues = new ContentValues();
+//            gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_DATE, game.getGameDate());
+//            gameValues.put(BowlingScorecardContract.Game.COLUMN_FIRST_GAME, game.getScores().get(0));
+//            gameValues.put(BowlingScorecardContract.Game.COLUMN_SECOND_GAME, game.getScores().get(1));
+//            gameValues.put(BowlingScorecardContract.Game.COLUMN_THIRD_GAME, game.getScores().get(2));
+//            gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_TOTAL, game.getTotal());
+//            gameValues.put(BowlingScorecardContract.Game.COLUMN_AVERAGE, game.getAverage());
+//            gameValues.put(BowlingScorecardContract.Game.COLUMN_SCORECARD_ID, id);
+//            long id1 = db.insert(BowlingScorecardContract.Game.TABLE_NAME, null, gameValues);
+//            System.out.println("GAME ID = " + id1);
+//        }
+//        db.close();
+//    }
 }
