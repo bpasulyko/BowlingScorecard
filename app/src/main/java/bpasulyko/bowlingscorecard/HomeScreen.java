@@ -26,8 +26,8 @@ public class HomeScreen extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void viewAllGames(View view) {
-        Intent intent = new Intent(this, GamesList.class);
+    public void viewAllScorecards(View view) {
+        Intent intent = new Intent(this, ScorecardsList.class);
         startActivity(intent);
     }
 }

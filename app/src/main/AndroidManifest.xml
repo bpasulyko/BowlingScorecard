@@ -17,6 +17,9 @@
             android:parentActivityName=".HomeScreen"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ScorecardsList"
+            android:parentActivityName=".HomeScreen"/>
+        <activity
             android:name=".GamesList"
             android:parentActivityName=".HomeScreen" />
         <activity

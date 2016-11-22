@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import bpasulyko.bowlingscorecard.models.Game;
+import bpasulyko.bowlingscorecard.models.ScoreCard;
 
 public class MainDbHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "bowlingScorecard.db";
@@ -78,6 +79,34 @@ public class MainDbHandler extends SQLiteOpenHelper {
             total += score;
         }
         return Math.floor(total / allScores.size());
+    }
+
+    public List<ScoreCard> getAllScorecards() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<ScoreCard> scorecards = getAllScorecards(db);
+        db.close();
+        return scorecards;
+    }
+
+    private List<ScoreCard> getAllScorecards(SQLiteDatabase db) {
+        String query = "SELECT " + BowlingScorecardContract.Scorecard.COLUMN_ID + ", " +
+                BowlingScorecardContract.Scorecard.COLUMN_NAME +
+                " FROM " + BowlingScorecardContract.Scorecard.TABLE_NAME;
+        Cursor cursor = db.rawQuery(query, null);
+        List<ScoreCard> scorecards = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            int idColumn = cursor.getColumnIndex(BowlingScorecardContract.Scorecard.COLUMN_ID);
+            int nameColumn = cursor.getColumnIndex(BowlingScorecardContract.Scorecard.COLUMN_NAME);
+            do {
+                Integer id = cursor.getInt(idColumn);
+                String name = cursor.getString(nameColumn);
+                scorecards.add(new ScoreCard(id, name));
+            } while(cursor.moveToNext());
+            cursor.close();
+        }
+        return scorecards;
     }
 
     public List<Game> getAllGames() {
