@@ -20,6 +20,7 @@ import java.util.List;
 
 import bpasulyko.bowlingscorecard.dbHandlers.MainDbHandler;
 import bpasulyko.bowlingscorecard.models.Game;
+import bpasulyko.bowlingscorecard.models.ScoreCard;
 
 public class GamesList extends AppCompatActivity {
 
@@ -27,30 +28,33 @@ public class GamesList extends AppCompatActivity {
     private ListView gamesListView;
     private List<Game> games;
     private Boolean deleteMode = false;
+    private ScoreCard scorecard = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_games_list);
+        dbHandler = new MainDbHandler(this, null, null, 1);
+        Intent intent = getIntent();
+        String addScoresMessage = intent.getStringExtra(AddScores.EXTRA_MESSAGE);
+        scorecard = (ScoreCard) intent.getSerializableExtra(ScorecardsList.EXTRA_MESSAGE);
         createToolbar();
 
-        dbHandler = new MainDbHandler(this, null, null, 1);
-        games = dbHandler.getAllGames();
+        if (scorecard != null) {
+            games = dbHandler.getAllGames(scorecard.getId());
+            gamesListView = (ListView) findViewById(R.id.gamesList);
+            gamesListView.setAdapter(new GameListAdapter(this, games, deleteMode));
+            gamesListView.setOnItemClickListener(itemClickListener);
+        }
 
-        gamesListView = (ListView) findViewById(R.id.gamesList);
-        gamesListView.setAdapter(new GameListAdapter(this, games, deleteMode));
-        gamesListView.setOnItemClickListener(itemClickListener);
-
-        Intent intent = getIntent();
-        String message = intent.getStringExtra(AddScores.EXTRA_MESSAGE);
-        if (message != null) {
-            Snackbar.make(this.findViewById(R.id.activity_games_list), message, Snackbar.LENGTH_SHORT).show();
+        if (addScoresMessage != null) {
+            Snackbar.make(this.findViewById(R.id.activity_games_list), addScoresMessage, Snackbar.LENGTH_SHORT).show();
         }
     }
 
     private void createToolbar() {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setTitle("BLAH");
+        myToolbar.setTitle(scorecard.getName());
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
@@ -77,7 +81,7 @@ public class GamesList extends AppCompatActivity {
                 dialog.cancel();
                 boolean gameDeleted = dbHandler.deleteSelectedGame(game);
                 String message = (gameDeleted) ? "Game deleted!" : "Error deleting game!";
-                games = dbHandler.getAllGames();
+                games = dbHandler.getAllGames(scorecard.getId());
                 gamesListView.setAdapter(new GameListAdapter(GamesList.this, games, deleteMode));
                 Snackbar.make(GamesList.this.findViewById(R.id.activity_games_list), message, Snackbar.LENGTH_SHORT).show();
             }

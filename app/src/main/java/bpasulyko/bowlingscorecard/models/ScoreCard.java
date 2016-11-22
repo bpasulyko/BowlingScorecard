@@ -1,6 +1,8 @@
 package bpasulyko.bowlingscorecard.models;
 
-public class ScoreCard {
+import java.io.Serializable;
+
+public class ScoreCard implements Serializable {
     private Integer id;
     private String name;
 

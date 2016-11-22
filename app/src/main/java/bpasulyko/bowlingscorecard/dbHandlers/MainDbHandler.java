@@ -109,25 +109,27 @@ public class MainDbHandler extends SQLiteOpenHelper {
         return scorecards;
     }
 
-    public List<Game> getAllGames() {
+    public List<Game> getAllGames(Integer scorecardId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        List<Game> games = getAllGames(db, 1);
+        List<Game> games = getAllGames(db, scorecardId);
         db.close();
         return games;
     }
 
     @NonNull
     private List<Game> getAllGames(SQLiteDatabase db, Integer scoreCardId) {
-        String query = "SELECT " + BowlingScorecardContract.Game.COLUMN_ID + ", " +
-                BowlingScorecardContract.Game.COLUMN_GAME_DATE + ", " +
-                BowlingScorecardContract.Game.COLUMN_FIRST_GAME + ", " +
-                BowlingScorecardContract.Game.COLUMN_SECOND_GAME + ", " +
-                BowlingScorecardContract.Game.COLUMN_THIRD_GAME + ", " +
-                BowlingScorecardContract.Game.COLUMN_GAME_TOTAL + ", " +
-                BowlingScorecardContract.Game.COLUMN_AVERAGE +
-                " FROM " + BowlingScorecardContract.Game.TABLE_NAME +
-                " WHERE " + BowlingScorecardContract.Game.COLUMN_SCORECARD_ID + " = " + scoreCardId +
-                " ORDER BY " + BowlingScorecardContract.Game.COLUMN_GAME_DATE;
+        String selectString = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s",
+                BowlingScorecardContract.Game.COLUMN_ID,
+                BowlingScorecardContract.Game.COLUMN_GAME_DATE,
+                BowlingScorecardContract.Game.COLUMN_FIRST_GAME,
+                BowlingScorecardContract.Game.COLUMN_SECOND_GAME,
+                BowlingScorecardContract.Game.COLUMN_THIRD_GAME,
+                BowlingScorecardContract.Game.COLUMN_GAME_TOTAL,
+                BowlingScorecardContract.Game.COLUMN_AVERAGE,
+                BowlingScorecardContract.Game.TABLE_NAME);
+        String whereClause = (scoreCardId != null) ? " WHERE " + BowlingScorecardContract.Game.COLUMN_SCORECARD_ID + " = " + scoreCardId : "";
+        String orderByClause = String.format(" ORDER BY %s", BowlingScorecardContract.Game.COLUMN_GAME_DATE);
+        String query = selectString + whereClause + orderByClause;
         Cursor cursor = db.rawQuery(query, null);
         List<Game> games = new ArrayList<>();
 
