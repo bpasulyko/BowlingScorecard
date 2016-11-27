@@ -21,6 +21,14 @@
             android:id="@+id/scorecardsList"
             android:layout_height="match_parent" />
 
+        <TextView
+            android:id="@+id/noScorecards"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/no_scorecards_added"
+            android:gravity="center_vertical|center_horizontal"/>
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_scorecard_button"
             android:layout_width="wrap_content"

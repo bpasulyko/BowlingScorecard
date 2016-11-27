@@ -25,7 +25,7 @@
             android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="No games added for this scorecard"
+            android:text="@string/no_games_added_for_this_scorecard"
             android:gravity="center_vertical|center_horizontal"/>
 
         <android.support.design.widget.FloatingActionButton

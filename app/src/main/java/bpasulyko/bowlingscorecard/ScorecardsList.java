@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -29,22 +30,35 @@ public class ScorecardsList extends AppCompatActivity {
     private ListView scorecardsListView;
     private EditText input;
     private AlertDialog addScorecardInput;
+    private TextView noScorecardsText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scorecards_list);
         createToolbar();
-
         dbHandler = new MainDbHandler(this, null, null, 1);
-        scorecards = dbHandler.getAllScorecards();
 
+        noScorecardsText = (TextView) findViewById(R.id.noScorecards);
         scorecardsListView = (ListView) findViewById(R.id.scorecardsList);
-        scorecardsListView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, scorecards));
         scorecardsListView.setOnItemClickListener(itemClickListener);
+        populateScorecardsList();
+
         input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         createNewScorecardDialog();
+    }
+
+    private void populateScorecardsList() {
+        scorecards = dbHandler.getAllScorecards();
+        if (scorecards.size() == 0) {
+            scorecardsListView.setVisibility(View.INVISIBLE);
+            noScorecardsText.setVisibility(View.VISIBLE);
+        } else {
+            scorecardsListView.setVisibility(View.VISIBLE);
+            noScorecardsText.setVisibility(View.INVISIBLE);
+            scorecardsListView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, scorecards));
+        }
     }
 
     private void createToolbar() {

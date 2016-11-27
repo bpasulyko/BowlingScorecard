@@ -18,4 +18,6 @@
     <string name="view_statistics">View Statistics</string>
     <string name="new_game">New Game</string>
     <string name="delete">Delete</string>
+    <string name="no_scorecards_added">No scorecards added</string>
+    <string name="no_games_added_for_this_scorecard">No games added for this scorecard</string>
 </resources>
