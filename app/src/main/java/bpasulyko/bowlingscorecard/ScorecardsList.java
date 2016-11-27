@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.View;
@@ -27,6 +28,7 @@ public class ScorecardsList extends AppCompatActivity {
     private List<ScoreCard> scorecards;
     private ListView scorecardsListView;
     private EditText input;
+    private AlertDialog addScorecardInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class ScorecardsList extends AppCompatActivity {
         scorecardsListView.setOnItemClickListener(itemClickListener);
         input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
+        createNewScorecardDialog();
     }
 
     private void createToolbar() {
@@ -51,6 +54,17 @@ public class ScorecardsList extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void createNewScorecardDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+        input.setTextColor(getResources().getColor(R.color.background));
+        dialog.setMessage("New Scorecard:");
+        dialog.setCancelable(true);
+        dialog.setView(input);
+        dialog.setPositiveButton("Save", saveScorecard);
+        dialog.setNegativeButton("Cancel", cancel);
+        addScorecardInput = dialog.create();
     }
 
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
@@ -65,13 +79,7 @@ public class ScorecardsList extends AppCompatActivity {
     };
 
     public void addScorecard(View view) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setMessage("New Scorecard:");
-        dialog.setCancelable(true);
-        dialog.setView(input);
-        dialog.setPositiveButton("Save", saveScorecard);
-        dialog.setNegativeButton("Cancel", cancel);
-        AlertDialog addScorecardInput = dialog.create();
+        input.setText("");
         addScorecardInput.show();
     }
 
