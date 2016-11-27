@@ -50,23 +50,23 @@ public class MainDbHandler extends SQLiteOpenHelper {
 
     }
 
-    public boolean addGame(long gameDate, Double firstGameScore, Double secondGameScore, Double thirdGameScore) {
+    public boolean addGame(long gameDate, Double firstGameScore, Double secondGameScore, Double thirdGameScore, Integer scorecardId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        List<Game> games = getAllGames(db, 1);
+        List<Game> games = getAllGames(db, scorecardId);
         ContentValues gameValues = new ContentValues();
         gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_DATE, gameDate);
         gameValues.put(BowlingScorecardContract.Game.COLUMN_FIRST_GAME, firstGameScore);
         gameValues.put(BowlingScorecardContract.Game.COLUMN_SECOND_GAME, secondGameScore);
         gameValues.put(BowlingScorecardContract.Game.COLUMN_THIRD_GAME, thirdGameScore);
         gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_TOTAL, (firstGameScore + secondGameScore + thirdGameScore));
-        gameValues.put(BowlingScorecardContract.Game.COLUMN_AVERAGE, getAverage(db, firstGameScore, secondGameScore, thirdGameScore, games));
-        gameValues.put(BowlingScorecardContract.Game.COLUMN_SCORECARD_ID, 1);
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_AVERAGE, getAverage(firstGameScore, secondGameScore, thirdGameScore, games));
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_SCORECARD_ID, scorecardId);
         db.insert(BowlingScorecardContract.Game.TABLE_NAME, null, gameValues);
         db.close();
         return true;
     }
 
-    private Double getAverage(SQLiteDatabase db, Double firstGameScore, Double secondGameScore, Double thirdGameScore, List<Game> games) {
+    private Double getAverage(Double firstGameScore, Double secondGameScore, Double thirdGameScore, List<Game> games) {
         Double total = 0d;
         List<Double> allScores = new ArrayList<>();
         for (Game game : games) {
@@ -128,7 +128,7 @@ public class MainDbHandler extends SQLiteOpenHelper {
                 BowlingScorecardContract.Game.COLUMN_AVERAGE,
                 BowlingScorecardContract.Game.TABLE_NAME);
         String whereClause = (scoreCardId != null) ? " WHERE " + BowlingScorecardContract.Game.COLUMN_SCORECARD_ID + " = " + scoreCardId : "";
-        String orderByClause = String.format(" ORDER BY %s", BowlingScorecardContract.Game.COLUMN_GAME_DATE);
+        String orderByClause = String.format(" ORDER BY %s DESC", BowlingScorecardContract.Game.COLUMN_GAME_DATE);
         String query = selectString + whereClause + orderByClause;
         Cursor cursor = db.rawQuery(query, null);
         List<Game> games = new ArrayList<>();

@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import bpasulyko.bowlingscorecard.dbHandlers.MainDbHandler;
+import bpasulyko.bowlingscorecard.models.ScoreCard;
 
 public class AddScores extends AppCompatActivity {
 
@@ -26,24 +27,46 @@ public class AddScores extends AppCompatActivity {
     private int year, month, day;
     private final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
     private MainDbHandler dbHandler;
+    private ScoreCard scorecard;
+    private EditText firstGame;
+    private EditText secondGame;
+    private EditText thirdGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_scores);
-        createToolbar();
         dbHandler = new MainDbHandler(this, null, null, 1);
-
+        Intent intent = getIntent();
+        scorecard = (ScoreCard) intent.getSerializableExtra(GamesList.EXTRA_MESSAGE);
         dateView = (TextView) findViewById(R.id.datePicker);
+        firstGame = (EditText) findViewById(R.id.firstGame);
+        secondGame = (EditText) findViewById(R.id.secondGame);
+        thirdGame = (EditText) findViewById(R.id.thirdGame);
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        createToolbar();
+        initializeInputs();
+    }
+
+    private void initializeInputs() {
+        firstGame.setText("");
+        secondGame.setText("");
+        thirdGame.setText("");
         showDate();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initializeInputs();
     }
 
     private void createToolbar() {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setTitle(R.string.add_scores);
+        myToolbar.setTitle(getResources().getString(R.string.new_game) + " - " + scorecard.getName());
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
@@ -75,9 +98,6 @@ public class AddScores extends AppCompatActivity {
 
     public void saveGames(View view) {
         long gameDate = calendar.getTimeInMillis();
-        EditText firstGame = (EditText) findViewById(R.id.firstGame);
-        EditText secondGame = (EditText) findViewById(R.id.secondGame);
-        EditText thirdGame = (EditText) findViewById(R.id.thirdGame);
         String firstGameScore = firstGame.getText().toString();
         String secondGameScore = secondGame.getText().toString();
         String thirdGameScore = thirdGame.getText().toString();
@@ -89,13 +109,16 @@ public class AddScores extends AppCompatActivity {
                     gameDate,
                     Double.parseDouble(firstGameScore),
                     Double.parseDouble(secondGameScore),
-                    Double.parseDouble(thirdGameScore));
-            String message = (gameAdded) ? "Game saved!" : "An error has occurred!";
+                    Double.parseDouble(thirdGameScore),
+                    scorecard.getId());
 
-            Intent intent = new Intent(this, GamesList.class);
-            intent.putExtra(EXTRA_MESSAGE, message);
-            startActivity(intent);
-            finish();
+            if (gameAdded) {
+                Intent intent = new Intent(this, GamesList.class);
+                intent.putExtra(EXTRA_MESSAGE, scorecard);
+                startActivity(intent);
+            } else {
+                Snackbar.make(this.findViewById(R.id.activity_games_list), "An error occurred!", Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 
