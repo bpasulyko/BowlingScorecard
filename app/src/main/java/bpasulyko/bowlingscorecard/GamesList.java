@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -31,12 +32,14 @@ public class GamesList extends AppCompatActivity {
     private List<Game> games;
     private Boolean deleteMode = false;
     private ScoreCard scorecard = null;
+    private TextView noGamesText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_games_list);
         dbHandler = new MainDbHandler(this, null, null, 1);
+        noGamesText = (TextView) findViewById(R.id.noGames);
         gamesListView = (ListView) findViewById(R.id.gamesList);
         gamesListView.setOnItemClickListener(itemClickListener);
         Intent intent = getIntent();
@@ -54,7 +57,14 @@ public class GamesList extends AppCompatActivity {
     private void populateGamesList() {
         if (scorecard != null) {
             games = dbHandler.getAllGames(scorecard.getId());
-            gamesListView.setAdapter(new GameListAdapter(this, games, deleteMode));
+            if (games.size() == 0) {
+                gamesListView.setVisibility(View.INVISIBLE);
+                noGamesText.setVisibility(View.VISIBLE);
+            } else {
+                gamesListView.setVisibility(View.VISIBLE);
+                noGamesText.setVisibility(View.INVISIBLE);
+                gamesListView.setAdapter(new GameListAdapter(this, games, deleteMode));
+            }
         }
     }
 
@@ -94,8 +104,7 @@ public class GamesList extends AppCompatActivity {
                 dialog.cancel();
                 boolean gameDeleted = dbHandler.deleteSelectedGame(game);
                 String message = (gameDeleted) ? "Game deleted!" : "Error deleting game!";
-                games = dbHandler.getAllGames(scorecard.getId());
-                gamesListView.setAdapter(new GameListAdapter(GamesList.this, games, deleteMode));
+                populateGamesList();
                 Snackbar.make(GamesList.this.findViewById(R.id.activity_games_list), message, Snackbar.LENGTH_SHORT).show();
             }
         };

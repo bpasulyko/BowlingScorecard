@@ -20,6 +20,14 @@
             android:id="@+id/gamesList"
             android:layout_height="match_parent" />
 
+        <TextView
+            android:id="@+id/noGames"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="No games added for this scorecard"
+            android:gravity="center_vertical|center_horizontal"/>
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_scores_button"
             android:layout_width="wrap_content"

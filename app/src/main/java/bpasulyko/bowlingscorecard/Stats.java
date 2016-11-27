@@ -23,7 +23,7 @@ public class Stats extends AppCompatActivity {
         setContentView(R.layout.activity_stats);
         createToolbar();
         MainDbHandler dbHandler = new MainDbHandler(this, null, null, 1);
-        allGames = dbHandler.getAllGames(null);
+        allGames = dbHandler.getAllGames(1);
         for (Game game : allGames) {
             allScores.addAll(game.getScores());
         }
