@@ -48,7 +48,7 @@ public class Stats extends AppCompatActivity {
     }
 
     private Double getRunningAverage() {
-        return allGames.get(allGames.size() - 1).getAverage();
+        return allGames.get(0).getAverage();
     }
 
     private Double getBestAverage() {
@@ -92,7 +92,7 @@ public class Stats extends AppCompatActivity {
     }
 
     private Double get3GameAverage() {
-        List<Double> totals = new ArrayList<>();;
+        List<Double> totals = new ArrayList<>();
         for (Game game : allGames) {
             totals.add(game.getTotal());
         }
@@ -124,6 +124,7 @@ public class Stats extends AppCompatActivity {
         myToolbar.setTitle(R.string.statistics);
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
+        assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
     }
 }

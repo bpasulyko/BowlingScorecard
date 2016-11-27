@@ -1,7 +1,6 @@
 package bpasulyko.bowlingscorecard;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -69,19 +68,13 @@ public class AddScores extends AppCompatActivity {
         myToolbar.setTitle(getResources().getString(R.string.new_game) + " - " + scorecard.getName());
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
+        assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
     public void setDate(View view) {
-        showDialog(999);
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        if (id == 999) {
-            return new DatePickerDialog(this, myDateListener, year, month, day);
-        }
-        return null;
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, year, month, day);
+        datePickerDialog.show();
     }
 
     private void showDate() {

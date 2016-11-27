@@ -69,6 +69,7 @@ public class GamesList extends AppCompatActivity {
         myToolbar.setTitle(scorecard.getName());
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
+        assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
     }
 

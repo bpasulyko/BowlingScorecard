@@ -1,13 +1,18 @@
 package bpasulyko.bowlingscorecard;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.List;
@@ -20,6 +25,8 @@ public class ScorecardsList extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "bpasulyko.bowlingscorecard.scorecardslist";
     private MainDbHandler dbHandler;
     private List<ScoreCard> scorecards;
+    private ListView scorecardsListView;
+    private EditText input;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +37,11 @@ public class ScorecardsList extends AppCompatActivity {
         dbHandler = new MainDbHandler(this, null, null, 1);
         scorecards = dbHandler.getAllScorecards();
 
-        ListView lv = (ListView) findViewById(R.id.scorecardsList);
-        lv.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, scorecards));
-        lv.setOnItemClickListener(itemClickListener);
+        scorecardsListView = (ListView) findViewById(R.id.scorecardsList);
+        scorecardsListView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, scorecards));
+        scorecardsListView.setOnItemClickListener(itemClickListener);
+        input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
     }
 
     private void createToolbar() {
@@ -40,6 +49,7 @@ public class ScorecardsList extends AppCompatActivity {
         myToolbar.setTitle(R.string.scorecards);
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
+        assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -51,6 +61,44 @@ public class ScorecardsList extends AppCompatActivity {
             Intent intent = new Intent(ScorecardsList.this, GamesList.class);
             intent.putExtra(EXTRA_MESSAGE, scoreCard);
             startActivity(intent);
+        }
+    };
+
+    public void addScorecard(View view) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setMessage("New Scorecard:");
+        dialog.setCancelable(true);
+        dialog.setView(input);
+        dialog.setPositiveButton("Save", saveScorecard);
+        dialog.setNegativeButton("Cancel", cancel);
+        AlertDialog addScorecardInput = dialog.create();
+        addScorecardInput.show();
+    }
+
+    private DialogInterface.OnClickListener saveScorecard = new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {
+            String scorecardName = input.getText().toString();
+            if (scorecardName.equals("")) {
+                Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), "Enter a name for this scorecard!", Snackbar.LENGTH_SHORT).show();
+            } else {
+                boolean validScorecardName = dbHandler.isValidScorecardName(scorecardName);
+                if (validScorecardName) {
+                    dialog.cancel();
+                    boolean scorecardAdded = dbHandler.addNewScorecard(scorecardName);
+                    String message = (scorecardAdded) ? scorecardName + " saved!" : "An error occurred!";
+                    scorecards = dbHandler.getAllScorecards();
+                    scorecardsListView.setAdapter(new ArrayAdapter<>(ScorecardsList.this, android.R.layout.simple_list_item_1, scorecards));
+                    Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), message, Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), "Name is already in use", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
+
+    private DialogInterface.OnClickListener cancel = new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {
+            dialog.cancel();
         }
     };
 }

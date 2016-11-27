@@ -81,6 +81,25 @@ public class MainDbHandler extends SQLiteOpenHelper {
         return Math.floor(total / allScores.size());
     }
 
+    public boolean isValidScorecardName(String scorecardName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = String.format("SELECT * FROM %s WHERE %s =  \"%s\"", BowlingScorecardContract.Scorecard.TABLE_NAME, BowlingScorecardContract.Scorecard.COLUMN_NAME, scorecardName);
+        Cursor cursor = db.rawQuery(query, null);
+        boolean isValid = !cursor.moveToFirst();
+        cursor.close();
+        db.close();
+        return isValid;
+    }
+
+    public boolean addNewScorecard(String scorecardName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues scorecardValues = new ContentValues();
+        scorecardValues.put(BowlingScorecardContract.Scorecard.COLUMN_NAME, scorecardName);
+        db.insert(BowlingScorecardContract.Scorecard.TABLE_NAME, null, scorecardValues);
+        db.close();
+        return true;
+    }
+
     public List<ScoreCard> getAllScorecards() {
         SQLiteDatabase db = this.getWritableDatabase();
         List<ScoreCard> scorecards = getAllScorecards(db);
