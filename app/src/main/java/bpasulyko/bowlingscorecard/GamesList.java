@@ -140,14 +140,17 @@ public class GamesList extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.action_delete:
-                deleteMode = !deleteMode;
-                gamesListView.setAdapter(new GameListAdapter(this, games, deleteMode));
-                invalidateOptionsMenu();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (games.size() > 0) {
+            switch (item.getItemId()) {
+                case R.id.action_delete:
+                    deleteMode = !deleteMode;
+                    gamesListView.setAdapter(new GameListAdapter(this, games, deleteMode));
+                    invalidateOptionsMenu();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
+        return super.onOptionsItemSelected(item);
     }
 }

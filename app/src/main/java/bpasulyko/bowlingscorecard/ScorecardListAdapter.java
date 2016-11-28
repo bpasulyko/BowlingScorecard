@@ -8,29 +8,28 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
-import bpasulyko.bowlingscorecard.models.Game;
+import bpasulyko.bowlingscorecard.models.ScoreCard;
 
-public class GameListAdapter extends BaseAdapter {
+public class ScorecardListAdapter extends BaseAdapter {
 
-    private List<Game> games;
+    private List<ScoreCard> scorecards;
     private static LayoutInflater inflater=null;
     private boolean visible = false;
 
-    public GameListAdapter(Activity a, List<Game> games, boolean visible) {
-        this.games = games;
+    public ScorecardListAdapter(Activity a, List<ScoreCard> scorecards, boolean visible) {
+        this.scorecards = scorecards;
         inflater = (LayoutInflater) a.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.visible = visible;
     }
 
     public int getCount() {
-        return games.size();
+        return scorecards.size();
     }
 
-    public Game getItem(int position) {
-        return games.get(position);
+    public ScoreCard getItem(int position) {
+        return scorecards.get(position);
     }
 
     public long getItemId(int position) {
@@ -40,24 +39,13 @@ public class GameListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         if(convertView == null) {
-            vi = inflater.inflate(R.layout.game_row, null);
+            vi = inflater.inflate(R.layout.scorecard_row, null);
         }
 
-        Game game = games.get(position);
+        ScoreCard scorecard = scorecards.get(position);
         TextView heading = (TextView)vi.findViewById(R.id.game_date_list_item);
-        TextView subHeading = (TextView)vi.findViewById(R.id.scores_sub_item);
         ViewGroup removeIconView = (ViewGroup) vi.findViewById(R.id.remove_icon);
-
-        heading.setText(game.getFormattedDateString() + ":  " + game.getScoresString());
-        DecimalFormat df = Game.getDecimalFormat();
-        String total = df.format(game.getTotal());
-        Double threeGameTotal = 0d;
-        for (Double score : game.getScores()) {
-            threeGameTotal += score;
-        }
-        String average = df.format(Math.floor(threeGameTotal / 3));
-        String runningAvg = df.format(game.getAverage());
-        subHeading.setText(String.format("Total: %s  Average: %s  Running Avg: %s", total, average, runningAvg));
+        heading.setText(scorecard.getName());
 
         if (visible) {
             int left = (int) (50 * vi.getResources().getDisplayMetrics().density);

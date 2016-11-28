@@ -3,6 +3,7 @@ package bpasulyko.bowlingscorecard;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,6 +31,7 @@ public class ScorecardsList extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "bpasulyko.bowlingscorecard.scorecardslist";
     private MainDbHandler dbHandler;
     private List<ScoreCard> scorecards;
+    private Boolean deleteMode = false;
     private ListView scorecardsListView;
     private EditText input;
     private AlertDialog addScorecardInput;
@@ -57,7 +62,7 @@ public class ScorecardsList extends AppCompatActivity {
         } else {
             scorecardsListView.setVisibility(View.VISIBLE);
             noScorecardsText.setVisibility(View.INVISIBLE);
-            scorecardsListView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, scorecards));
+            scorecardsListView.setAdapter(new ScorecardListAdapter(this, scorecards, deleteMode));
         }
     }
 
@@ -86,11 +91,41 @@ public class ScorecardsList extends AppCompatActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             final ScoreCard scoreCard = (ScoreCard) parent.getItemAtPosition(position);
-            Intent intent = new Intent(ScorecardsList.this, GamesList.class);
-            intent.putExtra(EXTRA_MESSAGE, scoreCard);
-            startActivity(intent);
+            if(deleteMode) {
+                generateDeleteConfirmationDialog(scoreCard);
+            } else {
+                Intent intent = new Intent(ScorecardsList.this, GamesList.class);
+                intent.putExtra(EXTRA_MESSAGE, scoreCard);
+                startActivity(intent);
+            }
         }
     };
+
+    private void generateDeleteConfirmationDialog(final ScoreCard scorecard) {
+        AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
+        confirmationDialog.setMessage("Delete " + scorecard.getName() + "?");
+        confirmationDialog.setCancelable(true);
+
+        DialogInterface.OnClickListener deleteGame = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+                boolean scorecardDeleted = dbHandler.deleteSelectedScorecard(scorecard);
+                String message = (scorecardDeleted) ? "Scorecard deleted!" : "Error deleting scorecard";
+                populateScorecardsList();
+                Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), message, Snackbar.LENGTH_SHORT).show();
+            }
+        };
+        DialogInterface.OnClickListener cancel = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        };
+
+        confirmationDialog.setPositiveButton("Yes", deleteGame);
+        confirmationDialog.setNegativeButton("No", cancel);
+        AlertDialog confirmationAlert = confirmationDialog.create();
+        confirmationAlert.show();
+    }
 
     public void addScorecard(View view) {
         input.setText("");
@@ -99,28 +134,56 @@ public class ScorecardsList extends AppCompatActivity {
 
     private DialogInterface.OnClickListener saveScorecard = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int id) {
-            String scorecardName = input.getText().toString();
-            if (scorecardName.equals("")) {
-                Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), "Enter a name for this scorecard!", Snackbar.LENGTH_SHORT).show();
+        String scorecardName = input.getText().toString();
+        if (scorecardName.equals("")) {
+            Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), "Enter a name for this scorecard!", Snackbar.LENGTH_SHORT).show();
+        } else {
+            boolean validScorecardName = dbHandler.isValidScorecardName(scorecardName);
+            if (validScorecardName) {
+                dialog.cancel();
+                boolean scorecardAdded = dbHandler.addNewScorecard(scorecardName);
+                String message = (scorecardAdded) ? scorecardName + " saved!" : "An error occurred!";
+                scorecards = dbHandler.getAllScorecards();
+                scorecardsListView.setAdapter(new ArrayAdapter<>(ScorecardsList.this, android.R.layout.simple_list_item_1, scorecards));
+                Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), message, Snackbar.LENGTH_SHORT).show();
             } else {
-                boolean validScorecardName = dbHandler.isValidScorecardName(scorecardName);
-                if (validScorecardName) {
-                    dialog.cancel();
-                    boolean scorecardAdded = dbHandler.addNewScorecard(scorecardName);
-                    String message = (scorecardAdded) ? scorecardName + " saved!" : "An error occurred!";
-                    scorecards = dbHandler.getAllScorecards();
-                    scorecardsListView.setAdapter(new ArrayAdapter<>(ScorecardsList.this, android.R.layout.simple_list_item_1, scorecards));
-                    Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), message, Snackbar.LENGTH_SHORT).show();
-                } else {
-                    Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), "Name is already in use", Snackbar.LENGTH_SHORT).show();
-                }
+                Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), "Name is already in use", Snackbar.LENGTH_SHORT).show();
             }
+        }
         }
     };
 
     private DialogInterface.OnClickListener cancel = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int id) {
-            dialog.cancel();
+        dialog.cancel();
         }
     };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_bar_games, menu);
+        int deleteIcon = (deleteMode) ? R.drawable.ic_clear : R.drawable.ic_delete;
+        menu.findItem(R.id.action_delete).setIcon(deleteIcon);
+        FloatingActionButton addButton = (FloatingActionButton) findViewById(R.id.add_scorecard_button);
+        int visibility = (deleteMode) ? View.INVISIBLE : View.VISIBLE;
+        addButton.setVisibility(visibility);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (scorecards.size() > 0) {
+            switch (item.getItemId()) {
+                case R.id.action_delete:
+                    deleteMode = !deleteMode;
+                    scorecardsListView.setAdapter(new ScorecardListAdapter(this, scorecards, deleteMode));
+                    invalidateOptionsMenu();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

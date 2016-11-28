@@ -176,10 +176,31 @@ public class MainDbHandler extends SQLiteOpenHelper {
 
     public boolean deleteSelectedGame(Game game) {
         SQLiteDatabase db = this.getWritableDatabase();
-        int rowsAffected = db.delete(BowlingScorecardContract.Game.TABLE_NAME, BowlingScorecardContract.Game.COLUMN_ID + " = ?",
-                new String[]{String.valueOf(game.getId())});
+        int rowsAffected = deleteGame(db, game);
         db.close();
         return rowsAffected > 0;
+    }
+
+    private int deleteGame(SQLiteDatabase db, Game game) {
+        return db.delete(BowlingScorecardContract.Game.TABLE_NAME, BowlingScorecardContract.Game.COLUMN_ID + " = ?",
+                new String[]{String.valueOf(game.getId())});
+    }
+
+    public boolean deleteSelectedScorecard(ScoreCard scorecard) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<Game> games = getAllGames(db, scorecard.getId());
+        int gamesDeleted = 0;
+
+        db.beginTransaction();
+        for (Game game : games) {
+            gamesDeleted += deleteGame(db, game);
+        }
+        int rowsAffected = db.delete(BowlingScorecardContract.Scorecard.TABLE_NAME, BowlingScorecardContract.Game.COLUMN_ID + " = ?",
+                new String[]{String.valueOf(scorecard.getId())});
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+        return rowsAffected > 0 && gamesDeleted == games.size();
     }
 
 //    public void updateDb() {
