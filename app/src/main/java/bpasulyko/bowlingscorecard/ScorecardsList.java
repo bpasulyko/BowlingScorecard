@@ -34,7 +34,7 @@ public class ScorecardsList extends AppCompatActivity {
     private Boolean deleteMode = false;
     private ListView scorecardsListView;
     private EditText input;
-    private AlertDialog addScorecardInput;
+    private AlertDialog addScorecardDialog;
     private TextView noScorecardsText;
 
     @Override
@@ -46,12 +46,21 @@ public class ScorecardsList extends AppCompatActivity {
 
         noScorecardsText = (TextView) findViewById(R.id.noScorecards);
         scorecardsListView = (ListView) findViewById(R.id.scorecardsList);
-        scorecardsListView.setOnItemClickListener(itemClickListener);
+        scorecardsListView.setOnItemClickListener(scorecardListClickListener);
         populateScorecardsList();
 
         input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         createNewScorecardDialog();
+    }
+
+    private void createToolbar() {
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setTitle(R.string.scorecards);
+        setSupportActionBar(myToolbar);
+        ActionBar ab = getSupportActionBar();
+        assert ab != null;
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     private void populateScorecardsList() {
@@ -66,15 +75,6 @@ public class ScorecardsList extends AppCompatActivity {
         }
     }
 
-    private void createToolbar() {
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setTitle(R.string.scorecards);
-        setSupportActionBar(myToolbar);
-        ActionBar ab = getSupportActionBar();
-        assert ab != null;
-        ab.setDisplayHomeAsUpEnabled(true);
-    }
-
     private void createNewScorecardDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
         input.setTextColor(getResources().getColor(R.color.background));
@@ -83,10 +83,10 @@ public class ScorecardsList extends AppCompatActivity {
         dialog.setView(input);
         dialog.setPositiveButton("Save", saveScorecard);
         dialog.setNegativeButton("Cancel", cancel);
-        addScorecardInput = dialog.create();
+        addScorecardDialog = dialog.create();
     }
 
-    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener scorecardListClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
@@ -102,10 +102,6 @@ public class ScorecardsList extends AppCompatActivity {
     };
 
     private void generateDeleteConfirmationDialog(final ScoreCard scorecard) {
-        AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
-        confirmationDialog.setMessage("Delete " + scorecard.getName() + "?");
-        confirmationDialog.setCancelable(true);
-
         DialogInterface.OnClickListener deleteGame = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
@@ -121,6 +117,9 @@ public class ScorecardsList extends AppCompatActivity {
             }
         };
 
+        AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
+        confirmationDialog.setMessage("Delete " + scorecard.getName() + "?");
+        confirmationDialog.setCancelable(true);
         confirmationDialog.setPositiveButton("Yes", deleteGame);
         confirmationDialog.setNegativeButton("No", cancel);
         AlertDialog confirmationAlert = confirmationDialog.create();
@@ -129,7 +128,7 @@ public class ScorecardsList extends AppCompatActivity {
 
     public void addScorecard(View view) {
         input.setText("");
-        addScorecardInput.show();
+        addScorecardDialog.show();
     }
 
     private DialogInterface.OnClickListener saveScorecard = new DialogInterface.OnClickListener() {

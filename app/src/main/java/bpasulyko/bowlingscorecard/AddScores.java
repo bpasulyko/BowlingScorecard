@@ -27,9 +27,7 @@ public class AddScores extends AppCompatActivity {
     private final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
     private MainDbHandler dbHandler;
     private ScoreCard scorecard;
-    private EditText firstGame;
-    private EditText secondGame;
-    private EditText thirdGame;
+    private EditText firstGame, secondGame, thirdGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +48,6 @@ public class AddScores extends AppCompatActivity {
         initializeInputs();
     }
 
-    private void initializeInputs() {
-        firstGame.setText("");
-        secondGame.setText("");
-        thirdGame.setText("");
-        showDate();
-    }
-
     @Override
     protected void onRestart() {
         super.onRestart();
@@ -72,13 +63,20 @@ public class AddScores extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    public void setDate(View view) {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, year, month, day);
-        datePickerDialog.show();
+    private void initializeInputs() {
+        firstGame.setText("");
+        secondGame.setText("");
+        thirdGame.setText("");
+        showDate();
     }
 
     private void showDate() {
         dateView.setText(formatter.format(calendar.getTime()));
+    }
+
+    public void setDate(View view) {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, year, month, day);
+        datePickerDialog.show();
     }
 
     private DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
@@ -110,7 +108,7 @@ public class AddScores extends AppCompatActivity {
                 intent.putExtra(EXTRA_MESSAGE, scorecard);
                 startActivity(intent);
             } else {
-                Snackbar.make(this.findViewById(R.id.activity_games_list), "An error occurred!", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(this.findViewById(R.id.activity_games_list), "Error occurred", Snackbar.LENGTH_SHORT).show();
             }
         }
     }

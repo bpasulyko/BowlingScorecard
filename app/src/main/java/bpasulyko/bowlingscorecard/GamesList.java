@@ -40,11 +40,11 @@ public class GamesList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_games_list);
         dbHandler = new MainDbHandler(this, null, null, 1);
+        Intent intent = getIntent();
+        ScoreCard savedScorecard = (ScoreCard) intent.getSerializableExtra(AddScores.EXTRA_MESSAGE);
         noGamesText = (TextView) findViewById(R.id.noGames);
         gamesListView = (ListView) findViewById(R.id.gamesList);
         gamesListView.setOnItemClickListener(itemClickListener);
-        Intent intent = getIntent();
-        ScoreCard savedScorecard = (ScoreCard) intent.getSerializableExtra(AddScores.EXTRA_MESSAGE);
         if (savedScorecard != null) {
             scorecard = savedScorecard;
             Snackbar.make(this.findViewById(R.id.activity_games_list), "Game saved!", Snackbar.LENGTH_SHORT).show();
@@ -53,20 +53,6 @@ public class GamesList extends AppCompatActivity {
         }
         createToolbar();
         populateGamesList();
-    }
-
-    private void populateGamesList() {
-        if (scorecard != null) {
-            games = dbHandler.getAllGames(scorecard.getId());
-            if (games.size() == 0) {
-                gamesListView.setVisibility(View.INVISIBLE);
-                noGamesText.setVisibility(View.VISIBLE);
-            } else {
-                gamesListView.setVisibility(View.VISIBLE);
-                noGamesText.setVisibility(View.INVISIBLE);
-                gamesListView.setAdapter(new GameListAdapter(this, games, deleteMode));
-            }
-        }
     }
 
     @Override
@@ -84,6 +70,20 @@ public class GamesList extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
+    private void populateGamesList() {
+        if (scorecard != null) {
+            games = dbHandler.getAllGames(scorecard.getId());
+            if (games.size() == 0) {
+                gamesListView.setVisibility(View.INVISIBLE);
+                noGamesText.setVisibility(View.VISIBLE);
+            } else {
+                gamesListView.setVisibility(View.VISIBLE);
+                noGamesText.setVisibility(View.INVISIBLE);
+                gamesListView.setAdapter(new GameListAdapter(this, games, deleteMode));
+            }
+        }
+    }
+
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -96,10 +96,6 @@ public class GamesList extends AppCompatActivity {
     };
 
     private void generateDeleteConfirmationDialog(final Game game) {
-        AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
-        confirmationDialog.setMessage("Delete " + game.getFormattedDateString() + " game?");
-        confirmationDialog.setCancelable(true);
-
         DialogInterface.OnClickListener deleteGame = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
@@ -115,10 +111,13 @@ public class GamesList extends AppCompatActivity {
             }
         };
 
+        AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
+        confirmationDialog.setMessage("Delete " + game.getFormattedDateString() + " game?");
+        confirmationDialog.setCancelable(true);
         confirmationDialog.setPositiveButton("Yes", deleteGame);
         confirmationDialog.setNegativeButton("No", cancel);
-        AlertDialog confirmationAlert = confirmationDialog.create();
-        confirmationAlert.show();
+        confirmationDialog.create();
+        confirmationDialog.show();
     }
 
     public void addScores(View view) {
