@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import bpasulyko.bowlingscorecard.adapters.ScorecardListAdapter;
 import bpasulyko.bowlingscorecard.dbHandlers.MainDbHandler;
 import bpasulyko.bowlingscorecard.models.ScoreCard;
 

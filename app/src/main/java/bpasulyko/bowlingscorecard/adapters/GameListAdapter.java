@@ -1,4 +1,4 @@
-package bpasulyko.bowlingscorecard;
+package bpasulyko.bowlingscorecard.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import bpasulyko.bowlingscorecard.R;
 import bpasulyko.bowlingscorecard.models.Game;
 
 public class GameListAdapter extends BaseAdapter {

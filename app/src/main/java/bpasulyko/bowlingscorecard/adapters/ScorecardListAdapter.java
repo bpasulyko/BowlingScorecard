@@ -1,4 +1,4 @@
-package bpasulyko.bowlingscorecard;
+package bpasulyko.bowlingscorecard.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import bpasulyko.bowlingscorecard.R;
 import bpasulyko.bowlingscorecard.models.ScoreCard;
 
 public class ScorecardListAdapter extends BaseAdapter {
