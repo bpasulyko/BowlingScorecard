@@ -16,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -143,8 +142,7 @@ public class ScorecardsList extends AppCompatActivity {
                 dialog.cancel();
                 boolean scorecardAdded = dbHandler.addNewScorecard(scorecardName);
                 String message = (scorecardAdded) ? scorecardName + " saved!" : "An error occurred!";
-                scorecards = dbHandler.getAllScorecards();
-                scorecardsListView.setAdapter(new ArrayAdapter<>(ScorecardsList.this, android.R.layout.simple_list_item_1, scorecards));
+                populateScorecardsList();
                 Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), message, Snackbar.LENGTH_SHORT).show();
             } else {
                 Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), "Name is already in use", Snackbar.LENGTH_SHORT).show();
