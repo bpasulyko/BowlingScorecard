@@ -33,7 +33,8 @@ public class MainDbHandler extends SQLiteOpenHelper {
                     + BowlingScorecardContract.Game.COLUMN_GAME_TOTAL + " REAL,"
                     + BowlingScorecardContract.Game.COLUMN_AVERAGE + " REAL,"
                     + BowlingScorecardContract.Game.COLUMN_SCORECARD_ID + " INTEGER,"
-                    + "FOREIGN KEY (" + BowlingScorecardContract.Game.COLUMN_SCORECARD_ID + ") REFERENCES " + BowlingScorecardContract.Scorecard.TABLE_NAME + "(" + BowlingScorecardContract.Scorecard.COLUMN_ID + "))";
+                    + " FOREIGN KEY (" + BowlingScorecardContract.Game.COLUMN_SCORECARD_ID + ") "
+                    + " REFERENCES " + BowlingScorecardContract.Scorecard.TABLE_NAME + "(" + BowlingScorecardContract.Scorecard.COLUMN_ID + "))";
 
     public MainDbHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DB_NAME, factory, DB_VERSION);
@@ -202,31 +203,4 @@ public class MainDbHandler extends SQLiteOpenHelper {
         db.close();
         return rowsAffected > 0 && gamesDeleted == games.size();
     }
-
-//    public void updateDb() {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        db.execSQL("DROP TABLE IF EXISTS " + BowlingScorecardContract.Scorecard.TABLE_NAME);
-//        db.execSQL("DROP TABLE IF EXISTS " + BowlingScorecardContract.Game.TABLE_NAME);
-//        db.execSQL(CREATE_SCORECARD_TABLE);
-//        db.execSQL(CREATE_GAME_TABLE);
-//        ContentValues scorecard = new ContentValues();
-//        scorecard.put(BowlingScorecardContract.Scorecard.COLUMN_NAME, "2016/17");
-//        long id = db.insert(BowlingScorecardContract.Scorecard.TABLE_NAME, null, scorecard);
-//        System.out.println("INSERTED ID = " + id);
-//
-//        List<Game> games = getAllGamesOLD(db);
-//        for (Game game : games) {
-//            ContentValues gameValues = new ContentValues();
-//            gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_DATE, game.getGameDate());
-//            gameValues.put(BowlingScorecardContract.Game.COLUMN_FIRST_GAME, game.getScores().get(0));
-//            gameValues.put(BowlingScorecardContract.Game.COLUMN_SECOND_GAME, game.getScores().get(1));
-//            gameValues.put(BowlingScorecardContract.Game.COLUMN_THIRD_GAME, game.getScores().get(2));
-//            gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_TOTAL, game.getTotal());
-//            gameValues.put(BowlingScorecardContract.Game.COLUMN_AVERAGE, game.getAverage());
-//            gameValues.put(BowlingScorecardContract.Game.COLUMN_SCORECARD_ID, id);
-//            long id1 = db.insert(BowlingScorecardContract.Game.TABLE_NAME, null, gameValues);
-//            System.out.println("GAME ID = " + id1);
-//        }
-//        db.close();
-//    }
 }
