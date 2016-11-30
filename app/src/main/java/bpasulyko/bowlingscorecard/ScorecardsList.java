@@ -68,6 +68,8 @@ public class ScorecardsList extends AppCompatActivity {
         if (scorecards.size() == 0) {
             scorecardsListView.setVisibility(View.INVISIBLE);
             noScorecardsText.setVisibility(View.VISIBLE);
+            deleteMode = false;
+            invalidateOptionsMenu();
         } else {
             scorecardsListView.setVisibility(View.VISIBLE);
             noScorecardsText.setVisibility(View.INVISIBLE);

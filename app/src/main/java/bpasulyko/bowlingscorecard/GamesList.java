@@ -76,6 +76,8 @@ public class GamesList extends AppCompatActivity {
             if (games.size() == 0) {
                 gamesListView.setVisibility(View.INVISIBLE);
                 noGamesText.setVisibility(View.VISIBLE);
+                deleteMode = false;
+                invalidateOptionsMenu();
             } else {
                 gamesListView.setVisibility(View.VISIBLE);
                 noGamesText.setVisibility(View.INVISIBLE);
