@@ -20,8 +20,9 @@
         <item name="android:textAlignment">viewEnd</item>
     </style>
 
-    <style name="AlertDialogCustom">
-        <item name="android:paddingStart">3dp</item>
-        <item name="android:paddingEnd">3dp</item>
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/background</item>
+        <item name="android:colorAccent">@color/colorText</item>
+        <item name="android:textColorPrimary">@color/colorText</item>
     </style>
 </resources>

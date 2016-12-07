@@ -1,12 +1,12 @@
 package bpasulyko.bowlingscorecard;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -113,7 +113,7 @@ public class GamesList extends AppCompatActivity {
             }
         };
 
-        AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         confirmationDialog.setMessage("Delete " + game.getFormattedDateString() + " game?");
         confirmationDialog.setCancelable(true);
         confirmationDialog.setPositiveButton("Yes", deleteGame);

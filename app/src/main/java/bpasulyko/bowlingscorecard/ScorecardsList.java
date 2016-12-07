@@ -8,9 +8,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -49,8 +48,6 @@ public class ScorecardsList extends AppCompatActivity {
         scorecardsListView.setOnItemClickListener(scorecardListClickListener);
         populateScorecardsList();
 
-        input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
         createNewScorecardDialog();
     }
 
@@ -78,13 +75,15 @@ public class ScorecardsList extends AppCompatActivity {
     }
 
     private void createNewScorecardDialog() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
-        input.setTextColor(getResources().getColor(R.color.background));
-        dialog.setMessage("New Scorecard:");
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.add_scorecard, null);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
+        dialog.setView(view);
+        dialog.setTitle("New Scorecard");
         dialog.setCancelable(true);
-        dialog.setView(input);
         dialog.setPositiveButton("Save", saveScorecard);
         dialog.setNegativeButton("Cancel", cancel);
+        input = (EditText) view.findViewById(R.id.scorecard_name);
         addScorecardDialog = dialog.create();
     }
 
@@ -119,7 +118,7 @@ public class ScorecardsList extends AppCompatActivity {
             }
         };
 
-        AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         confirmationDialog.setMessage("Delete " + scorecard.getName() + "?");
         confirmationDialog.setCancelable(true);
         confirmationDialog.setPositiveButton("Yes", deleteGame);
@@ -135,21 +134,21 @@ public class ScorecardsList extends AppCompatActivity {
 
     private DialogInterface.OnClickListener saveScorecard = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int id) {
-        String scorecardName = input.getText().toString();
-        if (scorecardName.equals("")) {
-            Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), "Enter a name for this scorecard!", Snackbar.LENGTH_SHORT).show();
-        } else {
-            boolean validScorecardName = dbHandler.isValidScorecardName(scorecardName);
-            if (validScorecardName) {
-                dialog.cancel();
-                boolean scorecardAdded = dbHandler.addNewScorecard(scorecardName);
-                String message = (scorecardAdded) ? scorecardName + " saved!" : "An error occurred!";
-                populateScorecardsList();
-                Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), message, Snackbar.LENGTH_SHORT).show();
+            String scorecardName = input.getText().toString();
+            if (scorecardName.equals("")) {
+                Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), "Enter a name for this scorecard!", Snackbar.LENGTH_SHORT).show();
             } else {
-                Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), "Name is already in use", Snackbar.LENGTH_SHORT).show();
+                boolean validScorecardName = dbHandler.isValidScorecardName(scorecardName);
+                if (validScorecardName) {
+                    dialog.cancel();
+                    boolean scorecardAdded = dbHandler.addNewScorecard(scorecardName);
+                    String message = (scorecardAdded) ? scorecardName + " saved!" : "An error occurred!";
+                    populateScorecardsList();
+                    Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), message, Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(ScorecardsList.this.findViewById(R.id.activity_scorecards_list), "Name is already in use", Snackbar.LENGTH_SHORT).show();
+                }
             }
-        }
         }
     };
 
