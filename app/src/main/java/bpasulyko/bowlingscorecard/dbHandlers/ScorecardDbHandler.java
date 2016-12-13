@@ -67,7 +67,7 @@ class ScorecardDbHandler {
         return scorecards;
     }
 
-    public boolean deleteSelectedScorecard(ScoreCard scorecard) {
+    boolean deleteSelectedScorecard(ScoreCard scorecard) {
         SQLiteDatabase db = dbHandler.getWritableDatabase();
         List<Game> games = gameDbHandler.getAllGames(db, scorecard.getId());
         int gamesDeleted = 0;
