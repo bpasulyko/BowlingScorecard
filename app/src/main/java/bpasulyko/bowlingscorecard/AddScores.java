@@ -93,9 +93,9 @@ public class AddScores extends AppCompatActivity {
         String secondGameScore = secondGame.getText().toString();
         String thirdGameScore = thirdGame.getText().toString();
 
-        if (invalidScores(firstGameScore, secondGameScore, thirdGameScore)) {
-            Snackbar.make(this.findViewById(R.id.activity_main), "Fill in all scores!", Snackbar.LENGTH_SHORT).show();
-        } else {
+//        if (invalidScores(firstGameScore, secondGameScore, thirdGameScore)) {
+//            Snackbar.make(this.findViewById(R.id.activity_main), "Fill in all scores!", Snackbar.LENGTH_SHORT).show();
+//        } else {
             boolean gameAdded = dbHandler.addGame(
                     gameDate,
                     Double.parseDouble(firstGameScore),
@@ -110,7 +110,7 @@ public class AddScores extends AppCompatActivity {
             } else {
                 Snackbar.make(this.findViewById(R.id.activity_games_list), "Error occurred", Snackbar.LENGTH_SHORT).show();
             }
-        }
+//        }
     }
 
     private boolean invalidScores(String firstGameScore, String secondGameScore, String thirdGameScore) {

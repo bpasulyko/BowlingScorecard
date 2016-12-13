@@ -16,7 +16,7 @@ import java.util.List;
 import bpasulyko.bowlingscorecard.dbHandlers.MainDbHandler;
 import bpasulyko.bowlingscorecard.models.Game;
 import bpasulyko.bowlingscorecard.models.ScoreCard;
-import bpasulyko.bowlingscorecard.models.StatisticsViewModel;
+import bpasulyko.bowlingscorecard.models.ui.StatisticsViewModel;
 
 public class Stats extends AppCompatActivity {
 

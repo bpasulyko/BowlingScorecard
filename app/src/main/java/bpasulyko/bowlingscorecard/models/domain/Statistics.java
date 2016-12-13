@@ -1,7 +1,9 @@
-package bpasulyko.bowlingscorecard.models;
+package bpasulyko.bowlingscorecard.models.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import bpasulyko.bowlingscorecard.models.Game;
 
 public class Statistics {
     private List<Game> games;
@@ -88,6 +90,6 @@ public class Statistics {
     }
 
     public Double getTotalGames() {
-        return Double.valueOf(scores.size());
+        return (double) scores.size();
     }
 }
