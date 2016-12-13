@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
-import bpasulyko.bowlingscorecard.models.Game;
 import bpasulyko.bowlingscorecard.models.ScoreCard;
+import bpasulyko.bowlingscorecard.models.ui.Game;
 
 public class MainDbHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "bowlingScorecard.db";

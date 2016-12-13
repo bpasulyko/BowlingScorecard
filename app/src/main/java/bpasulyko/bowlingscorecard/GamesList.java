@@ -21,8 +21,8 @@ import java.util.List;
 
 import bpasulyko.bowlingscorecard.adapters.GameListAdapter;
 import bpasulyko.bowlingscorecard.dbHandlers.MainDbHandler;
-import bpasulyko.bowlingscorecard.models.Game;
 import bpasulyko.bowlingscorecard.models.ScoreCard;
+import bpasulyko.bowlingscorecard.models.ui.Game;
 
 public class GamesList extends AppCompatActivity {
 

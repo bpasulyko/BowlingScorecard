@@ -12,7 +12,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import bpasulyko.bowlingscorecard.R;
-import bpasulyko.bowlingscorecard.models.Game;
+import bpasulyko.bowlingscorecard.models.ui.Game;
 
 public class GameListAdapter extends BaseAdapter {
 

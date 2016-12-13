@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import bpasulyko.bowlingscorecard.models.Game;
+import bpasulyko.bowlingscorecard.models.ui.Game;
 
 class GameDbHandler {
 
@@ -72,28 +72,7 @@ class GameDbHandler {
         String orderByClause = String.format(" ORDER BY %s DESC", BowlingScorecardContract.Game.COLUMN_GAME_DATE);
         String query = selectString + whereClause + orderByClause;
         Cursor cursor = db.rawQuery(query, null);
-        List<Game> games = new ArrayList<>();
-
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            int idColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_ID);
-            int dateColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_GAME_DATE);
-            int firstGameColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_FIRST_GAME);
-            int secondGameColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_SECOND_GAME);
-            int thirdGameColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_THIRD_GAME);
-            int totalColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_GAME_TOTAL);
-            int averageColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_AVERAGE);
-            do {
-                Integer id = cursor.getInt(idColumn);
-                long gameDate = cursor.getLong(dateColumn);
-                List<Double> scores = Arrays.asList(cursor.getDouble(firstGameColumn), cursor.getDouble(secondGameColumn), cursor.getDouble(thirdGameColumn));
-                Double total = cursor.getDouble(totalColumn);
-                Double average = cursor.getDouble(averageColumn);
-                games.add(new Game(id, gameDate, scores, total, average));
-            } while(cursor.moveToNext());
-            cursor.close();
-        }
-        return games;
+        return toGames(cursor);
     }
 
     boolean deleteSelectedGame(Game game) {
@@ -106,5 +85,27 @@ class GameDbHandler {
     int deleteGame(SQLiteDatabase db, Game game) {
         return db.delete(BowlingScorecardContract.Game.TABLE_NAME, BowlingScorecardContract.Game.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(game.getId())});
+    }
+
+    private List<Game> toGames(Cursor cursor) {
+        List<Game> games = new ArrayList<>();
+        cursor.moveToFirst();
+        int idColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_ID);
+        int dateColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_GAME_DATE);
+        int firstGameColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_FIRST_GAME);
+        int secondGameColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_SECOND_GAME);
+        int thirdGameColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_THIRD_GAME);
+        int totalColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_GAME_TOTAL);
+        int averageColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_AVERAGE);
+        do {
+            Integer id = cursor.getInt(idColumn);
+            long gameDate = cursor.getLong(dateColumn);
+            List<Double> scores = Arrays.asList(cursor.getDouble(firstGameColumn), cursor.getDouble(secondGameColumn), cursor.getDouble(thirdGameColumn));
+            Double total = cursor.getDouble(totalColumn);
+            Double average = cursor.getDouble(averageColumn);
+            games.add(new Game(id, gameDate, scores, total, average));
+        } while(cursor.moveToNext());
+        cursor.close();
+        return games;
     }
 }

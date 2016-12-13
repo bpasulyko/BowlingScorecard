@@ -1,4 +1,4 @@
-package bpasulyko.bowlingscorecard.models;
+package bpasulyko.bowlingscorecard.models.ui;
 
 import android.support.annotation.NonNull;
 

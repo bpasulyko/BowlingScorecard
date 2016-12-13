@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import bpasulyko.bowlingscorecard.models.Game;
 import bpasulyko.bowlingscorecard.models.ScoreCard;
+import bpasulyko.bowlingscorecard.models.ui.Game;
 
 class ScorecardDbHandler {
 

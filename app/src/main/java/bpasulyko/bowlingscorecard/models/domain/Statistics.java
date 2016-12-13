@@ -3,7 +3,7 @@ package bpasulyko.bowlingscorecard.models.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import bpasulyko.bowlingscorecard.models.Game;
+import bpasulyko.bowlingscorecard.models.ui.Game;
 
 public class Statistics {
     private List<Game> games;

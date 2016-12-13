@@ -2,7 +2,6 @@ package bpasulyko.bowlingscorecard.models.ui;
 
 import java.util.List;
 
-import bpasulyko.bowlingscorecard.models.Game;
 import bpasulyko.bowlingscorecard.models.domain.Statistics;
 
 public class StatisticsViewModel {
