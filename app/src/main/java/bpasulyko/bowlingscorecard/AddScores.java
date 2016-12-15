@@ -17,6 +17,7 @@ import java.util.Calendar;
 
 import bpasulyko.bowlingscorecard.dbHandlers.MainDbHandler;
 import bpasulyko.bowlingscorecard.models.ScoreCard;
+import bpasulyko.bowlingscorecard.models.ui.Game;
 
 public class AddScores extends AppCompatActivity {
 
@@ -27,7 +28,7 @@ public class AddScores extends AppCompatActivity {
     private final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
     private MainDbHandler dbHandler;
     private ScoreCard scorecard;
-    private EditText firstGame, secondGame, thirdGame;
+    private EditText firstGameInput, secondGameInput, thirdGameInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +38,9 @@ public class AddScores extends AppCompatActivity {
         Intent intent = getIntent();
         scorecard = (ScoreCard) intent.getSerializableExtra(GamesList.EXTRA_MESSAGE);
         dateView = (TextView) findViewById(R.id.datePicker);
-        firstGame = (EditText) findViewById(R.id.firstGame);
-        secondGame = (EditText) findViewById(R.id.secondGame);
-        thirdGame = (EditText) findViewById(R.id.thirdGame);
+        firstGameInput = (EditText) findViewById(R.id.firstGame);
+        secondGameInput = (EditText) findViewById(R.id.secondGame);
+        thirdGameInput = (EditText) findViewById(R.id.thirdGame);
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -64,9 +65,9 @@ public class AddScores extends AppCompatActivity {
     }
 
     private void initializeInputs() {
-        firstGame.setText("");
-        secondGame.setText("");
-        thirdGame.setText("");
+        firstGameInput.setText("");
+        secondGameInput.setText("");
+        thirdGameInput.setText("");
         showDate();
     }
 
@@ -89,31 +90,23 @@ public class AddScores extends AppCompatActivity {
 
     public void saveGames(View view) {
         long gameDate = calendar.getTimeInMillis();
-        String firstGameScore = firstGame.getText().toString();
-        String secondGameScore = secondGame.getText().toString();
-        String thirdGameScore = thirdGame.getText().toString();
+        String firstGame = firstGameInput.getText().toString();
+        String secondGame = secondGameInput.getText().toString();
+        String thirdGame = thirdGameInput.getText().toString();
 
-//        if (invalidScores(firstGameScore, secondGameScore, thirdGameScore)) {
-//            Snackbar.make(this.findViewById(R.id.activity_main), "Fill in all scores!", Snackbar.LENGTH_SHORT).show();
-//        } else {
-            boolean gameAdded = dbHandler.addGame(
-                    gameDate,
-                    Double.parseDouble(firstGameScore),
-                    Double.parseDouble(secondGameScore),
-                    Double.parseDouble(thirdGameScore),
-                    scorecard.getId());
+        boolean gameAdded = dbHandler.addGame(scorecard.getId(), new Game(
+            gameDate,
+            (!firstGame.equals("")) ? Double.parseDouble(firstGame) : null,
+            (!secondGame.equals("")) ? Double.parseDouble(secondGame) : null,
+            (!thirdGame.equals("")) ? Double.parseDouble(thirdGame) : null
+        ));
 
-            if (gameAdded) {
-                Intent intent = new Intent(this, GamesList.class);
-                intent.putExtra(EXTRA_MESSAGE, scorecard);
-                startActivity(intent);
-            } else {
-                Snackbar.make(this.findViewById(R.id.activity_games_list), "Error occurred", Snackbar.LENGTH_SHORT).show();
-            }
-//        }
-    }
-
-    private boolean invalidScores(String firstGameScore, String secondGameScore, String thirdGameScore) {
-        return firstGameScore.equals("") || secondGameScore.equals("") || thirdGameScore.equals("");
+        if (gameAdded) {
+            Intent intent = new Intent(this, GamesList.class);
+            intent.putExtra(EXTRA_MESSAGE, scorecard);
+            startActivity(intent);
+        } else {
+            Snackbar.make(this.findViewById(R.id.activity_games_list), "Error occurred", Snackbar.LENGTH_SHORT).show();
+        }
     }
 }

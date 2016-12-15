@@ -51,14 +51,9 @@ public class GameListAdapter extends BaseAdapter {
 
         heading.setText(game.getFormattedDateString() + ":  " + game.getScoresString());
         DecimalFormat df = Game.getDecimalFormat();
-        String total = df.format(game.getTotal());
-        Double threeGameTotal = 0d;
-        for (Double score : game.getScores()) {
-            threeGameTotal += score;
-        }
-        String average = df.format(Math.floor(threeGameTotal / 3));
-        String runningAvg = df.format(game.getAverage());
-        subHeading.setText(String.format("Total: %s  Average: %s  Running Avg: %s", total, average, runningAvg));
+        Double total = game.getTotal();
+        String average = df.format(Math.floor(total / 3));
+        subHeading.setText(String.format("Total: %s  Average: %s  Running Avg: %s", df.format(total), average, df.format(game.getAverage())));
 
         if (visible) {
             int left = (int) (50 * vi.getResources().getDisplayMetrics().density);

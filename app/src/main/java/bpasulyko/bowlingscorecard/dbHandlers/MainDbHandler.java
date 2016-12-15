@@ -64,8 +64,8 @@ public class MainDbHandler extends SQLiteOpenHelper {
     }
 
     /* GAME */
-    public boolean addGame(long gameDate, Double firstGameScore, Double secondGameScore, Double thirdGameScore, Integer scorecardId) {
-        return gameDbHandler.addGame(gameDate, firstGameScore, secondGameScore, thirdGameScore, scorecardId);
+    public boolean addGame(Integer scorecardId, Game game) {
+        return gameDbHandler.addGame(scorecardId, game);
     }
 
     public boolean isValidScorecardName(String scorecardName) {

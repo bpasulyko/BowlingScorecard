@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import bpasulyko.bowlingscorecard.models.ui.Game;
@@ -19,31 +18,29 @@ class GameDbHandler {
         this.dbHandler = dbHandler;
     }
 
-    boolean addGame(long gameDate, Double firstGameScore, Double secondGameScore, Double thirdGameScore, Integer scorecardId) {
+    boolean addGame(Integer scorecardId, Game gameToAdd) {
         SQLiteDatabase db = dbHandler.getWritableDatabase();
         List<Game> games = getAllGames(db, scorecardId);
         ContentValues gameValues = new ContentValues();
-        gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_DATE, gameDate);
-        gameValues.put(BowlingScorecardContract.Game.COLUMN_FIRST_GAME, firstGameScore);
-        gameValues.put(BowlingScorecardContract.Game.COLUMN_SECOND_GAME, secondGameScore);
-        gameValues.put(BowlingScorecardContract.Game.COLUMN_THIRD_GAME, thirdGameScore);
-        gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_TOTAL, (firstGameScore + secondGameScore + thirdGameScore));
-        gameValues.put(BowlingScorecardContract.Game.COLUMN_AVERAGE, getAverage(firstGameScore, secondGameScore, thirdGameScore, games));
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_DATE, gameToAdd.getGameDate());
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_FIRST_GAME, gameToAdd.getFirstGame());
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_SECOND_GAME, gameToAdd.getSecondGame());
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_THIRD_GAME, gameToAdd.getThirdGame());
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_TOTAL, gameToAdd.getTotal());
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_AVERAGE, getAverage(gameToAdd, games));
         gameValues.put(BowlingScorecardContract.Game.COLUMN_SCORECARD_ID, scorecardId);
         db.insert(BowlingScorecardContract.Game.TABLE_NAME, null, gameValues);
         db.close();
         return true;
     }
 
-    private Double getAverage(Double firstGameScore, Double secondGameScore, Double thirdGameScore, List<Game> games) {
+    private Double getAverage(Game gameToAdd, List<Game> games) {
         Double total = 0d;
         List<Double> allScores = new ArrayList<>();
         for (Game game : games) {
             allScores.addAll(game.getScores());
         }
-        allScores.add(firstGameScore);
-        allScores.add(secondGameScore);
-        allScores.add(thirdGameScore);
+        allScores.addAll(gameToAdd.getScores());
         for (Double score : allScores) {
             total += score;
         }
@@ -100,10 +97,12 @@ class GameDbHandler {
         do {
             Integer id = cursor.getInt(idColumn);
             long gameDate = cursor.getLong(dateColumn);
-            List<Double> scores = Arrays.asList(cursor.getDouble(firstGameColumn), cursor.getDouble(secondGameColumn), cursor.getDouble(thirdGameColumn));
+            Double firstGame = cursor.getDouble(firstGameColumn);
+            Double secondGame = cursor.getDouble(secondGameColumn);
+            Double thirdGame = cursor.getDouble(thirdGameColumn);
             Double total = cursor.getDouble(totalColumn);
             Double average = cursor.getDouble(averageColumn);
-            games.add(new Game(id, gameDate, scores, total, average));
+            games.add(new Game(id, gameDate, firstGame, secondGame, thirdGame, total, average));
         } while(cursor.moveToNext());
         cursor.close();
         return games;

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,22 +12,30 @@ public class Game {
     private Integer id;
     private Long date;
     private List<Double> scores;
+    private Double firstGame;
+    private Double secondGame;
+    private Double thirdGame;
     private Double total;
     private Double average;
 
-    public Game(Long date, List<Double> scores, Double total, Double average) {
+    public Game(Long date, Double firstGame, Double secondGame, Double thirdGame) {
         this.date = date;
-        this.scores = scores;
-        this.total = total;
-        this.average = average;
+        this.firstGame = firstGame;
+        this.secondGame = secondGame;
+        this.thirdGame = thirdGame;
+        setScores();
+        setTotal();
     }
 
-    public Game(Integer id, Long date, List<Double> scores, Double total, Double average) {
+    public Game(Integer id, Long date, Double firstGame, Double secondGame, Double thirdGame, Double total, Double average) {
         this.id = id;
         this.date = date;
-        this.scores = scores;
+        this.firstGame = firstGame;
+        this.secondGame = secondGame;
+        this.thirdGame = thirdGame;
         this.total = total;
         this.average = average;
+        setScores();
     }
 
     public Integer getId() {
@@ -37,20 +46,38 @@ public class Game {
         return date;
     }
 
+    public Double getFirstGame() {
+        return firstGame;
+    }
+
+    public Double getSecondGame() {
+        return secondGame;
+    }
+
+    public Double getThirdGame() {
+        return thirdGame;
+    }
+
     public List<Double> getScores() {
         return scores;
     }
 
-    public void setScores(List<Double> scores) {
-        this.scores = scores;
+    private void setScores() {
+        scores = new ArrayList<>();
+        if (firstGame != null) scores.add(firstGame);
+        if (secondGame != null) scores.add(secondGame);
+        if (thirdGame != null) scores.add(thirdGame);
     }
 
     public Double getTotal() {
         return total;
     }
 
-    public void setTotal(Double total) {
-        this.total = total;
+    private void setTotal() {
+        total = 0d;
+        if (firstGame != null) total += firstGame;
+        if (secondGame != null) total += secondGame;
+        if (thirdGame != null) total += thirdGame;
     }
 
     public Double getAverage() {
@@ -61,19 +88,13 @@ public class Game {
         this.average = average;
     }
 
+    public Boolean isFullSeries() {
+        return firstGame != null && secondGame != null && thirdGame != null;
+    }
+
     public String getFormattedDateString() {
         final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
         return formatter.format(new Date(date));
-    }
-
-    @Override
-    public String toString() {
-        DecimalFormat decimalFormat = getDecimalFormat();
-        String scoreString = "";
-        for (Double score : scores) {
-            scoreString += String.format(" %s ", decimalFormat.format(score));
-        }
-        return getFormattedDateString() + ":  " + scoreString + " -- " + decimalFormat.format(average);
     }
 
     public String getScoresString() {
