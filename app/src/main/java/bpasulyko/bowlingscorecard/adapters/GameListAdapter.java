@@ -18,12 +18,12 @@ public class GameListAdapter extends BaseAdapter {
 
     private List<Game> games;
     private static LayoutInflater inflater=null;
-    private boolean visible = false;
+    private boolean deleteMode = false;
 
-    public GameListAdapter(Activity a, List<Game> games, boolean visible) {
+    public GameListAdapter(Activity a, List<Game> games, boolean deleteMode) {
         this.games = games;
         inflater = (LayoutInflater) a.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.visible = visible;
+        this.deleteMode = deleteMode;
     }
 
     public int getCount() {
@@ -51,11 +51,18 @@ public class GameListAdapter extends BaseAdapter {
 
         heading.setText(game.getFormattedDateString() + ":  " + game.getScoresString());
         DecimalFormat df = Game.getDecimalFormat();
-        Double total = game.getTotal();
-        String average = df.format(Math.floor(total / 3));
-        subHeading.setText(String.format("Total: %s  Average: %s  Running Avg: %s", df.format(total), average, df.format(game.getAverage())));
+        String total = "--";
+        String average = "--";
+        boolean isFullSeries = game.isFullSeries();
+        if (isFullSeries) {
+            Double totalValue = game.getTotal();
+            total = df.format(totalValue);
+            average = df.format(Math.floor(totalValue / 3));
+        }
 
-        if (visible) {
+        subHeading.setText(String.format("Total: %s  Average: %s  Running Avg: %s", total, average, df.format(game.getAverage())));
+
+        if (deleteMode) {
             int left = (int) (50 * vi.getResources().getDisplayMetrics().density);
             ViewGroup gameDetailsView = (ViewGroup) vi.findViewById(R.id.game_row);
             gameDetailsView.setPadding(left, 0, 0, 0);

@@ -88,8 +88,8 @@ public class Game {
         this.average = average;
     }
 
-    public Boolean isFullSeries() {
-        return firstGame != null && secondGame != null && thirdGame != null;
+    public boolean isFullSeries() {
+        return firstGame > 0 && secondGame > 0 && thirdGame > 0;
     }
 
     public String getFormattedDateString() {
@@ -99,10 +99,9 @@ public class Game {
 
     public String getScoresString() {
         DecimalFormat decimalFormat = getDecimalFormat();
-        List<Double> scores = getScores();
-        String firstGame = decimalFormat.format(scores.get(0));
-        String secondGame = decimalFormat.format(scores.get(1));
-        String thirdGame = decimalFormat.format(scores.get(2));
+        String firstGame = (this.firstGame != null && this.firstGame > 0) ? decimalFormat.format(this.firstGame) : "--";
+        String secondGame = (this.secondGame != null && this.secondGame > 0) ? decimalFormat.format(this.secondGame) : "--";
+        String thirdGame = (this.thirdGame != null && this.thirdGame > 0) ? decimalFormat.format(this.thirdGame) : "--";
         return String.format("%s | %s | %s", firstGame, secondGame, thirdGame);
     }
 
