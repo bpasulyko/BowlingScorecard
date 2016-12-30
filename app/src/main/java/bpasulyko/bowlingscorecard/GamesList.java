@@ -3,17 +3,20 @@ package bpasulyko.bowlingscorecard;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,6 +37,9 @@ public class GamesList extends AppCompatActivity {
     private Boolean deleteMode = false;
     private ScoreCard scorecard = null;
     private TextView noGamesText;
+    private EditText firstGameInput;
+    private EditText secondGameInput;
+    private EditText thirdGameInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +50,7 @@ public class GamesList extends AppCompatActivity {
         ScoreCard savedScorecard = (ScoreCard) intent.getSerializableExtra(AddScores.EXTRA_MESSAGE);
         noGamesText = (TextView) findViewById(R.id.noGames);
         gamesListView = (ListView) findViewById(R.id.gamesList);
-        gamesListView.setOnItemClickListener(itemClickListener);
+        gamesListView.setOnItemClickListener(gameClickListener);
         if (savedScorecard != null) {
             scorecard = savedScorecard;
             Snackbar.make(this.findViewById(R.id.activity_games_list), "Game saved!", Snackbar.LENGTH_SHORT).show();
@@ -86,16 +92,61 @@ public class GamesList extends AppCompatActivity {
         }
     }
 
-    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener gameClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
+            final Game game = (Game) parent.getItemAtPosition(position);
             if (deleteMode) {
-                final Game game = (Game) parent.getItemAtPosition(position);
                 generateDeleteConfirmationDialog(game);
+            } else if (!game.isFullSeries()) {
+                generateEditGameDialog(game);
             }
         }
     };
+
+    private void generateEditGameDialog(final Game game) {
+        final View editGamesView = getEditGamesView(game);
+        DialogInterface.OnClickListener updateGame = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                String firstGame = firstGameInput.getText().toString();
+                String secondGame = secondGameInput.getText().toString();
+                String thirdGame = thirdGameInput.getText().toString();
+
+                dialog.cancel();
+                game.setFirstGame((!firstGame.isEmpty()) ? Double.parseDouble(firstGame) : null);
+                game.setSecondGame((!secondGame.isEmpty()) ? Double.parseDouble(secondGame) : null);
+                game.setThirdGame((!thirdGame.isEmpty()) ? Double.parseDouble(thirdGame) : null);
+                boolean gameSaved = dbHandler.updateGame(scorecard.getId(), game);
+                String message = (gameSaved) ? "Game updated!" : "Error saving game!";
+                populateGamesList();
+                Snackbar.make(GamesList.this.findViewById(R.id.activity_games_list), message, Snackbar.LENGTH_SHORT).show();
+            }
+        };
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(GamesList.this, R.style.AlertDialogCustom);
+        dialog.setView(editGamesView);
+        dialog.setTitle(game.getFormattedDateString());
+        dialog.setCancelable(true);
+        dialog.setPositiveButton("Save", updateGame);
+        dialog.setNegativeButton("Cancel", cancel);
+        dialog.create();
+        dialog.show();
+    }
+
+    @NonNull
+    private View getEditGamesView(Game game) {
+        LayoutInflater inflater = GamesList.this.getLayoutInflater();
+        View editGamesView = inflater.inflate(R.layout.edit_games, null);
+        firstGameInput = (EditText) editGamesView.findViewById(R.id.firstGame);
+        secondGameInput = (EditText) editGamesView.findViewById(R.id.secondGame);
+        thirdGameInput = (EditText) editGamesView.findViewById(R.id.thirdGame);
+
+        firstGameInput.setText((game.getFirstGame() != null) ? game.getFirstGame().toString() : "");
+        secondGameInput.setText((game.getSecondGame() != null) ? game.getSecondGame().toString() : "");
+        thirdGameInput.setText((game.getThirdGame() != null) ? game.getThirdGame().toString() : "");
+        return editGamesView;
+    }
 
     private void generateDeleteConfirmationDialog(final Game game) {
         DialogInterface.OnClickListener deleteGame = new DialogInterface.OnClickListener() {
@@ -107,11 +158,6 @@ public class GamesList extends AppCompatActivity {
                 Snackbar.make(GamesList.this.findViewById(R.id.activity_games_list), message, Snackbar.LENGTH_SHORT).show();
             }
         };
-        DialogInterface.OnClickListener cancel = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        };
 
         AlertDialog.Builder confirmationDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         confirmationDialog.setMessage("Delete " + game.getFormattedDateString() + " game?");
@@ -121,6 +167,12 @@ public class GamesList extends AppCompatActivity {
         confirmationDialog.create();
         confirmationDialog.show();
     }
+
+    private DialogInterface.OnClickListener cancel = new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {
+            dialog.cancel();
+        }
+    };
 
     public void addScores(View view) {
         Intent intent = new Intent(this, AddScores.class);

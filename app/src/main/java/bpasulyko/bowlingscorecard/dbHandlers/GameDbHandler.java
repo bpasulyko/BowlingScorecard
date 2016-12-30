@@ -20,31 +20,18 @@ class GameDbHandler {
 
     boolean addGame(Integer scorecardId, Game gameToAdd) {
         SQLiteDatabase db = dbHandler.getWritableDatabase();
-        List<Game> games = getAllGames(db, scorecardId);
+        gameToAdd.setAverage(getAllGames(db, scorecardId));
         ContentValues gameValues = new ContentValues();
         gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_DATE, gameToAdd.getGameDate());
         gameValues.put(BowlingScorecardContract.Game.COLUMN_FIRST_GAME, gameToAdd.getFirstGame());
         gameValues.put(BowlingScorecardContract.Game.COLUMN_SECOND_GAME, gameToAdd.getSecondGame());
         gameValues.put(BowlingScorecardContract.Game.COLUMN_THIRD_GAME, gameToAdd.getThirdGame());
         gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_TOTAL, gameToAdd.getTotal());
-        gameValues.put(BowlingScorecardContract.Game.COLUMN_AVERAGE, getAverage(gameToAdd, games));
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_AVERAGE, gameToAdd.getAverage());
         gameValues.put(BowlingScorecardContract.Game.COLUMN_SCORECARD_ID, scorecardId);
         db.insert(BowlingScorecardContract.Game.TABLE_NAME, null, gameValues);
         db.close();
         return true;
-    }
-
-    private Double getAverage(Game gameToAdd, List<Game> games) {
-        Double total = 0d;
-        List<Double> allScores = new ArrayList<>();
-        for (Game game : games) {
-            allScores.addAll(game.getScores());
-        }
-        allScores.addAll(gameToAdd.getScores());
-        for (Double score : allScores) {
-            total += score;
-        }
-        return Math.floor(total / allScores.size());
     }
 
     List<Game> getAllGames(Integer scorecardId) {
@@ -106,5 +93,24 @@ class GameDbHandler {
         } while(cursor.moveToNext());
         cursor.close();
         return games;
+    }
+
+    public boolean updateGame(Integer scorecardId, Game game) {
+        SQLiteDatabase db = dbHandler.getWritableDatabase();
+        game.setAverage(getAllGames(db, scorecardId));
+        ContentValues gameValues = new ContentValues();
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_FIRST_GAME, game.getFirstGame());
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_SECOND_GAME, game.getSecondGame());
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_THIRD_GAME, game.getThirdGame());
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_GAME_TOTAL, game.getTotal());
+        gameValues.put(BowlingScorecardContract.Game.COLUMN_AVERAGE, game.getAverage());
+        int rowsAffected = db.update(
+                BowlingScorecardContract.Game.TABLE_NAME,
+                gameValues,
+                BowlingScorecardContract.Game.COLUMN_ID + " = ? ",
+                new String[]{String.valueOf(game.getId())}
+        );
+        db.close();
+        return rowsAffected > 0;
     }
 }

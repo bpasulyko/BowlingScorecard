@@ -79,4 +79,8 @@ public class MainDbHandler extends SQLiteOpenHelper {
     public boolean deleteSelectedGame(Game game) {
         return gameDbHandler.deleteSelectedGame(game);
     }
+
+    public boolean updateGame(Integer scorecardId, Game game) {
+        return gameDbHandler.updateGame(scorecardId, game);
+    }
 }

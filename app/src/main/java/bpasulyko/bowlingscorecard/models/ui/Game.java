@@ -58,6 +58,18 @@ public class Game {
         return thirdGame;
     }
 
+    public void setFirstGame(Double firstGame) {
+        this.firstGame = firstGame;
+    }
+
+    public void setSecondGame(Double secondGame) {
+        this.secondGame = secondGame;
+    }
+
+    public void setThirdGame(Double thirdGame) {
+        this.thirdGame = thirdGame;
+    }
+
     public List<Double> getScores() {
         return scores;
     }
@@ -84,8 +96,17 @@ public class Game {
         return average;
     }
 
-    public void setAverage(Double average) {
-        this.average = average;
+    public void setAverage(List<Game> games) {
+        Double total = 0d;
+        List<Double> allScores = new ArrayList<>();
+        for (Game game : games) {
+            allScores.addAll(game.getScores());
+        }
+        allScores.addAll(this.getScores());
+        for (Double score : allScores) {
+            total += score;
+        }
+        this.average = Math.floor(total / allScores.size());
     }
 
     public boolean isFullSeries() {
