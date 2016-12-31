@@ -13,6 +13,15 @@ import bpasulyko.bowlingscorecard.models.ui.Game;
 class GameDbHandler {
 
     private final MainDbHandler dbHandler;
+    private final String selectString = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s",
+            BowlingScorecardContract.Game.COLUMN_ID,
+            BowlingScorecardContract.Game.COLUMN_GAME_DATE,
+            BowlingScorecardContract.Game.COLUMN_FIRST_GAME,
+            BowlingScorecardContract.Game.COLUMN_SECOND_GAME,
+            BowlingScorecardContract.Game.COLUMN_THIRD_GAME,
+            BowlingScorecardContract.Game.COLUMN_GAME_TOTAL,
+            BowlingScorecardContract.Game.COLUMN_AVERAGE,
+            BowlingScorecardContract.Game.TABLE_NAME);
 
     GameDbHandler(MainDbHandler dbHandler) {
         this.dbHandler = dbHandler;
@@ -43,16 +52,19 @@ class GameDbHandler {
 
     @NonNull
     List<Game> getAllGames(SQLiteDatabase db, Integer scoreCardId) {
-        String selectString = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s",
-                BowlingScorecardContract.Game.COLUMN_ID,
-                BowlingScorecardContract.Game.COLUMN_GAME_DATE,
-                BowlingScorecardContract.Game.COLUMN_FIRST_GAME,
-                BowlingScorecardContract.Game.COLUMN_SECOND_GAME,
-                BowlingScorecardContract.Game.COLUMN_THIRD_GAME,
-                BowlingScorecardContract.Game.COLUMN_GAME_TOTAL,
-                BowlingScorecardContract.Game.COLUMN_AVERAGE,
-                BowlingScorecardContract.Game.TABLE_NAME);
         String whereClause = (scoreCardId != null) ? " WHERE " + BowlingScorecardContract.Game.COLUMN_SCORECARD_ID + " = " + scoreCardId : "";
+        String orderByClause = String.format(" ORDER BY %s DESC", BowlingScorecardContract.Game.COLUMN_GAME_DATE);
+        String query = selectString + whereClause + orderByClause;
+        Cursor cursor = db.rawQuery(query, null);
+        return toGames(cursor);
+    }
+
+    @NonNull
+    private List<Game> getAllFullSeriesGames(SQLiteDatabase db, Integer scoreCardId) {
+        String whereClause = " WHERE " + BowlingScorecardContract.Game.COLUMN_SCORECARD_ID + " = " + scoreCardId +
+                " AND " + BowlingScorecardContract.Game.COLUMN_FIRST_GAME + " > 0 " +
+                " AND " + BowlingScorecardContract.Game.COLUMN_SECOND_GAME + " > 0 " +
+                " AND " + BowlingScorecardContract.Game.COLUMN_THIRD_GAME + " > 0 ";
         String orderByClause = String.format(" ORDER BY %s DESC", BowlingScorecardContract.Game.COLUMN_GAME_DATE);
         String query = selectString + whereClause + orderByClause;
         Cursor cursor = db.rawQuery(query, null);
@@ -97,7 +109,7 @@ class GameDbHandler {
 
     public boolean updateGame(Integer scorecardId, Game game) {
         SQLiteDatabase db = dbHandler.getWritableDatabase();
-        game.setAverage(getAllGames(db, scorecardId));
+        game.setAverage(getAllFullSeriesGames(db, scorecardId));
         ContentValues gameValues = new ContentValues();
         gameValues.put(BowlingScorecardContract.Game.COLUMN_FIRST_GAME, game.getFirstGame());
         gameValues.put(BowlingScorecardContract.Game.COLUMN_SECOND_GAME, game.getSecondGame());

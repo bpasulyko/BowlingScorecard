@@ -117,6 +117,7 @@ public class GamesList extends AppCompatActivity {
                 game.setFirstGame((!firstGame.isEmpty()) ? Double.parseDouble(firstGame) : null);
                 game.setSecondGame((!secondGame.isEmpty()) ? Double.parseDouble(secondGame) : null);
                 game.setThirdGame((!thirdGame.isEmpty()) ? Double.parseDouble(thirdGame) : null);
+                game.setTotal();
                 boolean gameSaved = dbHandler.updateGame(scorecard.getId(), game);
                 String message = (gameSaved) ? "Game updated!" : "Error saving game!";
                 populateGamesList();
@@ -142,9 +143,9 @@ public class GamesList extends AppCompatActivity {
         secondGameInput = (EditText) editGamesView.findViewById(R.id.secondGame);
         thirdGameInput = (EditText) editGamesView.findViewById(R.id.thirdGame);
 
-        firstGameInput.setText((game.getFirstGame() != null) ? game.getFirstGame().toString() : "");
-        secondGameInput.setText((game.getSecondGame() != null) ? game.getSecondGame().toString() : "");
-        thirdGameInput.setText((game.getThirdGame() != null) ? game.getThirdGame().toString() : "");
+        firstGameInput.setText((game.getFirstGame() != null && game.getFirstGame() > 0) ? game.getFirstGame().toString() : "");
+        secondGameInput.setText((game.getSecondGame() != null && game.getSecondGame() > 0) ? game.getSecondGame().toString() : "");
+        thirdGameInput.setText((game.getThirdGame() != null && game.getThirdGame() > 0) ? game.getThirdGame().toString() : "");
         return editGamesView;
     }
 

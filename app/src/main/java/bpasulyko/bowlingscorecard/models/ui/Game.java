@@ -71,6 +71,7 @@ public class Game {
     }
 
     public List<Double> getScores() {
+        setScores();
         return scores;
     }
 
@@ -85,7 +86,7 @@ public class Game {
         return total;
     }
 
-    private void setTotal() {
+    public void setTotal() {
         total = 0d;
         if (firstGame != null) total += firstGame;
         if (secondGame != null) total += secondGame;
@@ -100,7 +101,9 @@ public class Game {
         Double total = 0d;
         List<Double> allScores = new ArrayList<>();
         for (Game game : games) {
-            allScores.addAll(game.getScores());
+            if (game.isFullSeries()) {
+                allScores.addAll(game.getScores());
+            }
         }
         allScores.addAll(this.getScores());
         for (Double score : allScores) {
