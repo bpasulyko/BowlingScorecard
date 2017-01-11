@@ -68,7 +68,9 @@ public class Statistics {
     public Double get3GameAverage() {
         List<Double> totals = new ArrayList<>();
         for (Game game : games) {
-            totals.add(game.getTotal());
+            if (game.isFullSeries()) {
+                totals.add(game.getTotal());
+            }
         }
 
         Double total = 0d;
