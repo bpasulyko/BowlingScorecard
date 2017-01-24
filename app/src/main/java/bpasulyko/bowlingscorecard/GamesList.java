@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import bpasulyko.bowlingscorecard.adapters.GameListAdapter;
@@ -139,13 +140,14 @@ public class GamesList extends AppCompatActivity {
     private View getEditGamesView(Game game) {
         LayoutInflater inflater = GamesList.this.getLayoutInflater();
         View editGamesView = inflater.inflate(R.layout.edit_games, null);
+        DecimalFormat df = Game.getDecimalFormat();
         firstGameInput = (EditText) editGamesView.findViewById(R.id.firstGame);
         secondGameInput = (EditText) editGamesView.findViewById(R.id.secondGame);
         thirdGameInput = (EditText) editGamesView.findViewById(R.id.thirdGame);
 
-        firstGameInput.setText((game.getFirstGame() != null && game.getFirstGame() > 0) ? game.getFirstGame().toString() : "");
-        secondGameInput.setText((game.getSecondGame() != null && game.getSecondGame() > 0) ? game.getSecondGame().toString() : "");
-        thirdGameInput.setText((game.getThirdGame() != null && game.getThirdGame() > 0) ? game.getThirdGame().toString() : "");
+        firstGameInput.setText((game.getFirstGame() != null && game.getFirstGame() > 0) ? df.format(game.getFirstGame()) : "");
+        secondGameInput.setText((game.getSecondGame() != null && game.getSecondGame() > 0) ? df.format(game.getSecondGame()) : "");
+        thirdGameInput.setText((game.getThirdGame() != null && game.getThirdGame() > 0) ? df.format(game.getThirdGame()) : "");
         return editGamesView;
     }
 
