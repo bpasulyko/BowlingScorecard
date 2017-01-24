@@ -18,11 +18,7 @@ public class Statistics {
     }
 
     public Double getRunningAverage() {
-        Double total = 0d;
-        for (Double score : scores) {
-            total += score;
-        }
-        return total/scores.size();
+        return (games.size() > 0) ? games.get(0).getAverage() : null;
     }
 
     public Double getBestAverage() {
