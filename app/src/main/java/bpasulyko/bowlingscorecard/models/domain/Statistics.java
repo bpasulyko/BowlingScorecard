@@ -48,7 +48,7 @@ public class Statistics {
     public Double getWorstGame() {
         Double worstGame = Double.MAX_VALUE;
         for (Double score : scores) {
-            if (score < worstGame) {
+            if (score < worstGame && score > 0) {
                 worstGame = score;
             }
         }
