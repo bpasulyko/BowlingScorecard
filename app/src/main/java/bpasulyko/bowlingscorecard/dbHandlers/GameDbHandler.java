@@ -94,14 +94,16 @@ class GameDbHandler {
         int totalColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_GAME_TOTAL);
         int averageColumn = cursor.getColumnIndex(BowlingScorecardContract.Game.COLUMN_AVERAGE);
         do {
-            Integer id = cursor.getInt(idColumn);
-            long gameDate = cursor.getLong(dateColumn);
-            Double firstGame = cursor.getDouble(firstGameColumn);
-            Double secondGame = cursor.getDouble(secondGameColumn);
-            Double thirdGame = cursor.getDouble(thirdGameColumn);
-            Double total = cursor.getDouble(totalColumn);
-            Double average = cursor.getDouble(averageColumn);
-            games.add(new Game(id, gameDate, firstGame, secondGame, thirdGame, total, average));
+            if (cursor.getCount() > 0) {
+                Integer id = cursor.getInt(idColumn);
+                long gameDate = cursor.getLong(dateColumn);
+                Double firstGame = cursor.getDouble(firstGameColumn);
+                Double secondGame = cursor.getDouble(secondGameColumn);
+                Double thirdGame = cursor.getDouble(thirdGameColumn);
+                Double total = cursor.getDouble(totalColumn);
+                Double average = cursor.getDouble(averageColumn);
+                games.add(new Game(id, gameDate, firstGame, secondGame, thirdGame, total, average));
+            }
         } while(cursor.moveToNext());
         cursor.close();
         return games;
