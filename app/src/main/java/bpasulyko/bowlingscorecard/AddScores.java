@@ -76,7 +76,7 @@ public class AddScores extends AppCompatActivity {
     }
 
     public void setDate(View view) {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, year, month, day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DatePickerDialogTheme, myDateListener, year, month, day);
         datePickerDialog.show();
     }
 
