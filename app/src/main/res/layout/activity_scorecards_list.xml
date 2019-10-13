@@ -8,7 +8,7 @@
     android:orientation="vertical">
     <include android:id="@+id/my_toolbar" layout="@layout/toolbar" />
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/activity_scorecards_list"
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             android:text="@string/no_scorecards_added"
             android:gravity="center_vertical|center_horizontal"/>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_scorecard_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,5 +40,5 @@
             app:layout_anchorGravity="bottom|right|end"
             android:onClick="addScorecard"/>
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </LinearLayout>
